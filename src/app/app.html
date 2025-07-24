@@ -1,118 +1,411 @@
-<h1>CSV/Excel Column Selector</h1>
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+        <div
+          class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+        </div>
+        CSV/Excel Column Selector
+      </h1>
+      <p class="mt-2 text-gray-600">
+        Process and export your data with custom column selection
+      </p>
+    </div>
+  </div>
 
-<div class="upload-section">
-  <input type="file" (input)="uploadFile($event)" accept=".csv,.xlsx,.xls" />
-  @if (fileName()) {
-  <p class="file-name">Loaded: {{ fileName() }}</p>
-  }
-</div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Upload Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <div class="text-center">
+        <div
+          class="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          Upload Your File
+        </h3>
+        <p class="text-gray-600 mb-6">
+          Select a CSV or Excel file to get started
+        </p>
 
-@if (csvData().length > 0) {
-<!-- Column Selection Section -->
-<div class="processing-section">
-  <h3>Select Columns to Export</h3>
-  <div class="column-selection">
-    @for (header of headers(); track $index) {
-    <label class="column-checkbox">
-      <input
-        type="checkbox"
-        [checked]="selectedColumns().includes($index)"
-        (change)="toggleColumn($index, $event)"
-      />
-      {{ header }}
-    </label>
+        <input
+          type="file"
+          (input)="uploadFile($event)"
+          accept=".csv,.xlsx,.xls"
+          #fileInput
+          class="hidden"
+        />
+        <button
+          (click)="fileInput.click()"
+          class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+            ></path>
+          </svg>
+          Choose File
+        </button>
+        <p class="mt-3 text-sm text-gray-500">
+          Supports CSV, XLS, and XLSX files
+        </p>
+
+        @if (fileName()) {
+        <div
+          class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          File loaded: {{ fileName() }}
+        </div>
+        }
+      </div>
+    </div>
+
+    @if (csvData().length > 0) {
+    <!-- Processing Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <h3
+        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
+      >
+        <svg
+          class="w-6 h-6 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          ></path>
+        </svg>
+        Select Columns to Export @if (selectedColumns().length > 0) {
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+        >
+          {{ selectedColumns().length }} selected
+        </span>
+        }
+      </h3>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-8"
+      >
+        @for (header of headers(); track $index) {
+        <label
+          class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
+          [class.border-blue-500]="selectedColumns().includes($index)"
+          [class.bg-blue-50]="selectedColumns().includes($index)"
+        >
+          <input
+            type="checkbox"
+            [checked]="selectedColumns().includes($index)"
+            (change)="toggleColumn($index, $event)"
+            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <span
+            class="ml-3 text-sm font-medium text-gray-700 truncate"
+            [title]="header"
+            >{{ header }}</span
+          >
+        </label>
+        }
+      </div>
+
+      <!-- Processing Options -->
+      <div class="border-t border-gray-200 pt-6 mb-6">
+        <h4
+          class="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2"
+        >
+          <svg
+            class="w-5 h-5 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+            ></path>
+          </svg>
+          Processing Options
+        </h4>
+
+        <label
+          class="flex items-center p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
+        >
+          <input
+            type="checkbox"
+            [(ngModel)]="validateBarcodes"
+            (change)="updateProcessingOptions()"
+            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <div class="ml-3">
+            <span class="text-sm font-medium text-gray-700"
+              >Validate Barcode Length</span
+            >
+            <p class="text-sm text-gray-500">
+              Add measurement columns based on barcode length
+            </p>
+          </div>
+        </label>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4">
+        <button
+          (click)="processData()"
+          [disabled]="selectedColumns().length === 0"
+          class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m2-7a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          Export Selected Columns
+        </button>
+
+        <button
+          (click)="downloadProcessedData()"
+          [disabled]="!processedData().length"
+          class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+          Download CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Original Data Table -->
+    @if (csvData().length > 0) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <h3
+        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
+      >
+        <svg
+          class="w-6 h-6 text-green-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+        Original Data
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+        >
+          {{ csvData().length }} rows
+        </span>
+      </h3>
+      <div class="overflow-x-auto border border-gray-200 rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16"
+              >
+                #
+              </th>
+              @for (header of headers(); track $index) {
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider transition-colors"
+                [class.bg-blue-100]="selectedColumns().includes($index)"
+                [class.text-blue-700]="selectedColumns().includes($index)"
+              >
+                {{ header }}
+              </th>
+              }
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @for (row of csvData(); track $index) {
+            <tr class="hover:bg-gray-50">
+              <td
+                class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500"
+              >
+                {{ $index + 1 }}
+              </td>
+              @for (cell of row; track $index) {
+              <td
+                class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 transition-colors"
+                [class.bg-blue-50]="selectedColumns().includes($index)"
+                [class.border-l-2]="selectedColumns().includes($index)"
+                [class.border-blue-300]="selectedColumns().includes($index)"
+              >
+                {{ cell }}
+              </td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <!-- Exported Data Table -->
+    @if (processedData().length > 0) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+      <h3
+        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
+      >
+        <svg
+          class="w-6 h-6 text-purple-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+        Exported Data
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+        >
+          {{ processedData().length }} rows
+        </span>
+      </h3>
+      <div class="overflow-x-auto border border-gray-200 rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16"
+              >
+                #
+              </th>
+              @for (header of processedHeaders(); track $index) {
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                {{ header }}
+              </th>
+              }
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @for (row of processedData(); track $index) {
+            <tr class="hover:bg-gray-50">
+              <td
+                class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500"
+              >
+                {{ $index + 1 }}
+              </td>
+              @for (cell of row; track $index) {
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                {{ cell }}
+              </td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    } } @if (csvData().length === 0) {
+    <div class="text-center py-12">
+      <div
+        class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4"
+      >
+        <svg
+          class="w-8 h-8 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+      </div>
+      <p class="text-gray-500 text-lg">
+        No data loaded. Please select a CSV or Excel file to get started.
+      </p>
+    </div>
     }
   </div>
-
-  <div class="processing-options">
-    <label class="option-checkbox">
-      <input
-        type="checkbox"
-        [(ngModel)]="validateBarcodes"
-        (change)="updateProcessingOptions()"
-      />
-      Validate Barcode Length
-    </label>
-  </div>
-
-  <div class="action-buttons">
-    <button
-      class="btn-process"
-      (click)="processData()"
-      [disabled]="selectedColumns().length === 0"
-    >
-      Export Selected Columns
-    </button>
-    <button
-      class="btn-download"
-      (click)="downloadProcessedData()"
-      [disabled]="!processedData().length"
-    >
-      Download CSV
-    </button>
-  </div>
 </div>
-
-<!-- Original Data Table -->
-<div class="table-section">
-  <h3>Original Data</h3>
-  <div class="table-container">
-    <table class="csv-table">
-      <thead>
-        <tr>
-          <th class="row-number">#</th>
-          @for (header of headers(); track $index) {
-          <th [class.selected-column]="selectedColumns().includes($index)">
-            {{ header }}
-          </th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of csvData(); track $index) {
-        <tr>
-          <td class="row-number">{{ $index + 1 }}</td>
-          @for (cell of row; track $index) {
-          <td [class.selected-column]="selectedColumns().includes($index)">
-            {{ cell }}
-          </td>
-          }
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- Exported Data Table -->
-@if (processedData().length > 0) {
-<div class="table-section">
-  <h3>Exported Data</h3>
-  <div class="table-container">
-    <table class="csv-table">
-      <thead>
-        <tr>
-          <th class="row-number">#</th>
-          @for (header of processedHeaders(); track $index) {
-          <th>{{ header }}</th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of processedData(); track $index) {
-        <tr>
-          <td class="row-number">{{ $index + 1 }}</td>
-          @for (cell of row; track $index) {
-          <td>{{ cell }}</td>
-          }
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-</div>
-} } @else {
-<p class="no-data">
-  No data loaded. Please select a Goodwill CSV or Excel file.
-</p>
-}
