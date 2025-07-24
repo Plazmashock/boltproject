@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "serve:ssr:io-csv": "node dist/io-csv/server/server.mjs"
   },
   "prettier": {
     "overrides": [
@@ -24,9 +25,12 @@
     "@angular/core": "^20.1.0",
     "@angular/forms": "^20.1.0",
     "@angular/platform-browser": "^20.1.0",
+    "@angular/platform-server": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "@angular/ssr": "^20.1.2",
     "@tailwindcss/postcss": "^4.1.11",
     "exceljs": "^4.4.0",
+    "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -34,6 +38,8 @@
     "@angular/build": "^20.1.1",
     "@angular/cli": "^20.1.1",
     "@angular/compiler-cli": "^20.1.0",
+    "@types/express": "^5.0.1",
+    "@types/node": "^20.17.19",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",

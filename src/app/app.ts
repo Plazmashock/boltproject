@@ -1,15 +1,18 @@
-import { Component, signal } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { Component, signal, OnInit, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import * as ExcelJS from "exceljs";
+import { Meta, Title } from "@angular/platform-browser";
+import { Workbook } from "exceljs";
 
 @Component({
   selector: "app-root",
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: "./app.html",
   styleUrl: "./app.css",
 })
-export class App {
+export class App implements OnInit {
+  private meta = inject(Meta);
+  private titleService = inject(Title);
+
   csvData = signal<string[][]>([]);
   headers = signal<string[]>([]);
   fileName = signal<string>("");
@@ -19,6 +22,94 @@ export class App {
 
   // Processing options
   validateBarcodes = false;
+
+  ngOnInit() {
+    this.setSeoMetaTags();
+  }
+
+  private setSeoMetaTags() {
+    // Set page title
+    this.titleService.setTitle(
+      "CSV/Excel Column Selector - Professional Data Processing Tool"
+    );
+
+    // Set meta description
+    this.meta.updateTag({
+      name: "description",
+      content:
+        "Professional CSV and Excel file processor with column selection, barcode validation, and data export capabilities. Perfect for Goodwill workflow and data management.",
+    });
+
+    // Set meta keywords
+    this.meta.updateTag({
+      name: "keywords",
+      content:
+        "CSV processor, Excel file converter, column selector, data export, barcode validation, Goodwill workflow, data management, file processing",
+    });
+
+    // Set author
+    this.meta.updateTag({
+      name: "author",
+      content: "CSV Column Selector",
+    });
+
+    // Set robots
+    this.meta.updateTag({
+      name: "robots",
+      content: "index, follow",
+    });
+
+    // Open Graph tags for social media
+    this.meta.updateTag({
+      property: "og:title",
+      content: "CSV/Excel Column Selector - Professional Data Processing Tool",
+    });
+
+    this.meta.updateTag({
+      property: "og:description",
+      content:
+        "Professional CSV and Excel file processor with column selection, barcode validation, and data export capabilities.",
+    });
+
+    this.meta.updateTag({
+      property: "og:type",
+      content: "website",
+    });
+
+    this.meta.updateTag({
+      property: "og:url",
+      content: "https://your-domain.com",
+    });
+
+    // Twitter Card tags
+    this.meta.updateTag({
+      name: "twitter:card",
+      content: "summary_large_image",
+    });
+
+    this.meta.updateTag({
+      name: "twitter:title",
+      content: "CSV/Excel Column Selector - Professional Data Processing Tool",
+    });
+
+    this.meta.updateTag({
+      name: "twitter:description",
+      content:
+        "Professional CSV and Excel file processor with column selection, barcode validation, and data export capabilities.",
+    });
+
+    // Viewport and mobile optimization
+    this.meta.updateTag({
+      name: "viewport",
+      content: "width=device-width, initial-scale=1.0",
+    });
+
+    // Theme color for mobile browsers
+    this.meta.updateTag({
+      name: "theme-color",
+      content: "#2563eb",
+    });
+  }
 
   uploadFile(e: any) {
     const file = e.target.files[0];
@@ -49,7 +140,7 @@ export class App {
 
   private async handleExcelFile(file: File) {
     try {
-      const workbook = new ExcelJS.Workbook();
+      const workbook = new Workbook();
       const arrayBuffer = await file.arrayBuffer();
       await workbook.xlsx.load(arrayBuffer);
 
