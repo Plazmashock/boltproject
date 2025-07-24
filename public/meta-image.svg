@@ -1,0 +1,67 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- Main content container -->
+  <rect x="100" y="100" width="1000" height="430" rx="20" fill="rgba(255,255,255,0.95)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  
+  <!-- Icon -->
+  <circle cx="200" cy="250" r="60" fill="#2563eb"/>
+  <path d="M170 230 L200 200 L230 230 M200 200 L200 300 M160 270 L240 270" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- CSV Table Representation -->
+  <rect x="320" y="180" width="200" height="120" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" rx="8"/>
+  <line x1="320" y1="210" x2="520" y2="210" stroke="#e2e8f0" stroke-width="2"/>
+  <line x1="370" y1="180" x2="370" y2="300" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="420" y1="180" x2="420" y2="300" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="470" y1="180" x2="470" y2="300" stroke="#e2e8f0" stroke-width="1"/>
+  
+  <!-- Selected columns highlight -->
+  <rect x="370" y="180" width="50" height="120" fill="rgba(37, 99, 235, 0.1)" stroke="#2563eb" stroke-width="2" rx="4"/>
+  <rect x="470" y="180" width="50" height="120" fill="rgba(37, 99, 235, 0.1)" stroke="#2563eb" stroke-width="2" rx="4"/>
+  
+  <!-- Arrow -->
+  <path d="M550 240 L590 240 M580 230 L590 240 L580 250" stroke="#2563eb" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Output table -->
+  <rect x="620" y="180" width="120" height="120" fill="#f0f9ff" stroke="#2563eb" stroke-width="2" rx="8"/>
+  <line x1="620" y1="210" x2="740" y2="210" stroke="#2563eb" stroke-width="2"/>
+  <line x1="670" y1="180" x2="670" y2="300" stroke="#2563eb" stroke-width="1"/>
+  <line x1="690" y1="180" x2="690" y2="300" stroke="#2563eb" stroke-width="1"/>
+  
+  <!-- Title -->
+  <text x="600" y="100" text-anchor="middle" fill="#1e40af" font-family="Arial, sans-serif" font-size="48" font-weight="bold">
+    CSV Column Processor
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="140" text-anchor="middle" fill="#475569" font-family="Arial, sans-serif" font-size="24">
+    Select • Process • Export Your Data
+  </text>
+  
+  <!-- Features -->
+  <text x="120" y="380" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="600">✓ CSV &amp; Excel Support</text>
+  <text x="120" y="410" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="600">✓ Column Selection</text>
+  <text x="120" y="440" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="600">✓ Barcode Validation</text>
+  
+  <text x="400" y="380" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="600">✓ Data Export</text>
+  <text x="400" y="410" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="600">✓ Modern Interface</text>
+  <text x="400" y="440" fill="#374151" font-family="Arial, sans-serif" font-size="20" font-weight="600">✓ Fast Processing</text>
+  
+  <!-- Bottom accent -->
+  <rect x="100" y="580" width="1000" height="4" fill="#2563eb" rx="2"/>
+</svg>
