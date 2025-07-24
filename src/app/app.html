@@ -1,4 +1,4 @@
-<h1>Io CSV/Excel Processor</h1>
+<h1>CSV/Excel Column Selector</h1>
 
 <div class="upload-section">
   <input type="file" (input)="uploadFile($event)" accept=".csv,.xlsx,.xls" />
@@ -10,7 +10,7 @@
 @if (csvData().length > 0) {
 <!-- Column Selection Section -->
 <div class="processing-section">
-  <h3>Select Columns to Process</h3>
+  <h3>Select Columns to Export</h3>
   <div class="column-selection">
     @for (header of headers(); track $index) {
     <label class="column-checkbox">
@@ -28,37 +28,10 @@
     <label class="option-checkbox">
       <input
         type="checkbox"
-        [(ngModel)]="addTranslation"
-        (change)="updateProcessingOptions()"
-      />
-      Add English Translation Columns
-    </label>
-
-    <label class="option-checkbox">
-      <input
-        type="checkbox"
-        [(ngModel)]="addCategories"
-        (change)="updateProcessingOptions()"
-      />
-      Add Category & Subcategory Matching
-    </label>
-
-    <label class="option-checkbox">
-      <input
-        type="checkbox"
         [(ngModel)]="validateBarcodes"
         (change)="updateProcessingOptions()"
       />
       Validate Barcode Length
-    </label>
-
-    <label class="option-checkbox">
-      <input
-        type="checkbox"
-        [(ngModel)]="applyGoodwillFormula"
-        (change)="updateProcessingOptions()"
-      />
-      Apply Goodwill Formula
     </label>
   </div>
 
@@ -68,21 +41,14 @@
       (click)="processData()"
       [disabled]="selectedColumns().length === 0"
     >
-      Process Selected Columns
+      Export Selected Columns
     </button>
     <button
       class="btn-download"
       (click)="downloadProcessedData()"
       [disabled]="!processedData().length"
     >
-      Download Processed CSV
-    </button>
-    <button
-      class="btn-copy"
-      (click)="copyGoogleSheetsFormulas()"
-      [disabled]="!processedData().length"
-    >
-      Copy Google Sheets Formulas
+      Download CSV
     </button>
   </div>
 </div>
@@ -107,12 +73,7 @@
         <tr>
           <td class="row-number">{{ $index + 1 }}</td>
           @for (cell of row; track $index) {
-          <td
-            [class.selected-column]="selectedColumns().includes($index)"
-            [class.short-barcode]="
-              isBarcodeColumn($index) && isShortBarcode(cell)
-            "
-          >
+          <td [class.selected-column]="selectedColumns().includes($index)">
             {{ cell }}
           </td>
           }
@@ -123,10 +84,10 @@
   </div>
 </div>
 
-<!-- Processed Data Table -->
+<!-- Exported Data Table -->
 @if (processedData().length > 0) {
 <div class="table-section">
-  <h3>Processed Data</h3>
+  <h3>Exported Data</h3>
   <div class="table-container">
     <table class="csv-table">
       <thead>
