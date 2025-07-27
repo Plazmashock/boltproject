@@ -1,0 +1,5 @@
+<svg width="144" height="144" viewBox="0 0 144 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="144" height="144" rx="32" fill="#34D399"/>
+  <path d="M36 48C36 41.3726 41.3726 36 48 36H72V60H84C90.6274 60 96 65.3726 96 72V96C96 102.627 90.6274 108 84 108H60V84H48C41.3726 84 36 78.6274 36 72V48Z" fill="white"/>
+  <text x="72" y="125" text-anchor="middle" fill="#047857" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Bolt Food</text>
+</svg>

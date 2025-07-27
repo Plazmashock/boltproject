@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "serve:ssr:io-csv": "node dist/io-csv/server/server.mjs"
+    "serve": "ng serve"
   },
   "prettier": {
     "overrides": [
@@ -20,6 +20,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/cdk": "^20.1.3",
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
     "@angular/core": "^20.1.0",
@@ -27,7 +28,7 @@
     "@angular/platform-browser": "^20.1.0",
     "@angular/platform-server": "^20.1.0",
     "@angular/router": "^20.1.0",
-    "@angular/ssr": "^20.1.2",
+    "@angular/ssr": "^20.1.3",
     "@tailwindcss/postcss": "^4.1.11",
     "exceljs": "^4.4.0",
     "express": "^5.1.0",

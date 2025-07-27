@@ -1,0 +1,734 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+        <div
+          class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"
+        >
+          <svg
+            class="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+        </div>
+        CSV Column Processor
+      </h1>
+      <p class="mt-2 text-gray-600">
+        Select, process and export your data with professional tools
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Upload Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <div class="text-center">
+        <div
+          class="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          Upload Your File
+        </h3>
+        <p class="text-gray-600 mb-6">
+          Select a CSV or Excel file to get started
+        </p>
+
+        <input
+          type="file"
+          (input)="uploadFile($event)"
+          accept=".csv,.xlsx,.xls"
+          #fileInput
+          class="hidden"
+        />
+        <button
+          (click)="fileInput.click()"
+          class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+            ></path>
+          </svg>
+          Choose File
+        </button>
+        <p class="mt-3 text-sm text-gray-500">
+          Supports CSV, XLS, and XLSX files
+        </p>
+
+        @if (fileName()) {
+        <div
+          class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          File loaded: {{ fileName() }}
+        </div>
+        }
+      </div>
+    </div>
+
+    @if (csvData().length > 0) {
+    <!-- Mode Selection -->
+    @if (!selectedMode()) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <h3 class="text-xl font-semibold text-gray-900 mb-6">Select Processing Mode</h3>
+      <div class="flex gap-4">
+        <button
+          (click)="setMode('3p')"
+          class="flex-1 inline-flex items-center justify-center px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          Update 3P Assortments
+        </button>
+        <button
+          (click)="setMode('provider')"
+          class="flex-1 inline-flex items-center justify-center px-6 py-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Format Provider Menu
+        </button>
+      </div>
+    </div>
+    }
+
+    <!-- Processing Section -->
+    @if (selectedMode()) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <div>
+        <h3
+        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
+      >
+        <svg
+          class="w-6 h-6 text-blue-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          ></path>
+        </svg>
+        Select Columns to Export @if (selectedColumns().length > 0) {
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+        >
+          {{ selectedColumns().length }} selected
+        </span>
+        }
+      </h3>
+
+      @if (selectedMode() === '3p') {
+      <div
+        cdkDropList
+        (cdkDropListDropped)="dropColumn($event)"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-8"
+      >
+        @for (header of headers(); track $index) {
+        <div
+          cdkDrag
+          class="flex flex-col"
+        >
+          <label
+            class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
+            [class.border-blue-500]="selectedColumns().includes($index)"
+            [class.bg-blue-50]="selectedColumns().includes($index)"
+          >
+            <input
+              type="checkbox"
+              [checked]="selectedColumns().includes($index)"
+              (change)="toggleColumn($index, $event)"
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <div class="flex-grow flex items-center justify-between">
+              <span
+                class="ml-3 text-sm font-medium text-gray-700 truncate"
+                [title]="header"
+              >{{ header }}</span>
+              @if (showImageManagement()) {
+                <button
+                  type="button"
+                  (click)="openImageAssignment($index)"
+                  class="ml-2 p-1.5 text-gray-400 hover:text-purple-600 rounded-full hover:bg-purple-50 transition-colors"
+                  [class.text-purple-600]="columnImageMap()[$index]"
+                  [title]="columnImageMap()[$index] ? 'Change image' : 'Assign image'"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              }
+            </div>
+          </label>
+          @if (showImageManagement() && columnImageMap()[$index]) {
+          <div class="mt-2 p-2 bg-purple-50 rounded-lg border border-purple-100">
+            <div class="flex items-center gap-2">
+              <img 
+                [src]="columnImageMap()[$index].thumbUrl" 
+                [alt]="columnImageMap()[$index].fileName"
+                class="w-8 h-8 rounded object-cover"
+              />
+              <a 
+                [href]="columnImageMap()[$index].url"
+                target="_blank"
+                class="text-xs text-purple-600 hover:text-purple-800 truncate flex-grow"
+              >
+                {{ columnImageMap()[$index].fileName }}
+              </a>
+              <button
+                (click)="removeColumnImage($index)"
+                class="p-1 text-gray-400 hover:text-red-500"
+                title="Remove image association"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          }
+          <div class="cdkDragHandle mt-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-move">
+            <div class="flex justify-center">
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Processing Options -->
+      <div class="border-t border-gray-200 pt-6 mb-6">
+        <h4
+          class="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2"
+        >
+          <svg
+            class="w-5 h-5 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+            ></path>
+          </svg>
+          Processing Options
+        </h4>
+
+        <div class="space-y-4">
+          @if (selectedMode() === '3p') {
+          <div class="flex items-start gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all">
+            <label class="flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                [ngModel]="validateBarcodes()"
+                (ngModelChange)="updateValidateBarcodes($event)"
+                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <div class="ml-3">
+                <span class="text-sm font-medium text-gray-700"
+                  >Validate Barcode Length</span
+                >
+                <p class="text-sm text-gray-500">
+                  Add measurement columns based on barcode length
+                </p>
+              </div>
+            </label>
+
+            <div class="flex-1 flex flex-col">
+              <label class="text-sm font-medium text-gray-700 mb-1">Select Barcode Column</label>
+              <select
+                [ngModel]="selectedBarcodeColumn()"
+                (ngModelChange)="updateSelectedBarcodeColumn($event)"
+                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                [disabled]="!validateBarcodes()"
+              >
+                <option value="">Select a column</option>
+                @for (header of headers(); track header) {
+                  <option [value]="header">{{ header }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          }
+
+          @if (selectedMode() === 'provider') {
+          <label
+            class="flex items-center p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
+          >
+            <input
+              type="checkbox"
+              [ngModel]="showImageManagement()"
+              (ngModelChange)="updateShowImageManagement($event)"
+              class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+            />
+            <div class="ml-3">
+              <span class="text-sm font-medium text-gray-700"
+                >Match Images</span
+              >
+              <p class="text-sm text-gray-500">
+                Enable image upload and management for data entries
+              </p>
+            </div>
+          </label>
+          }
+        </div>
+      </div>
+
+      <!-- Image Upload Section -->
+      @if (showImageManagement()) {
+      <div class="border-t border-gray-200 pt-6 mb-6">
+        <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-8 h-8 bg-purple-100 rounded-full">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </span>
+          Image Management
+        </h4>
+
+        <!-- Image Upload Area -->
+        <div class="p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-purple-400 transition-colors">
+          <div class="text-center">
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              #imageInput
+              class="hidden"
+              (change)="uploadMultipleImages($event)"
+            />
+            <div class="space-y-2">
+              <button
+                (click)="imageInput.click()"
+                class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors gap-2"
+                [disabled]="isUploading()"
+              >
+                @if (isUploading()) {
+                  <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                } @else {
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                }
+                {{ isUploading() ? 'Uploading...' : 'Upload Images' }}
+              </button>
+              <p class="text-sm text-gray-500">Drag & drop images here or click to select</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image List -->
+        @if (images().length > 0) {
+        <div class="mt-6 space-y-4">
+          <div class="flex justify-between items-center">
+            <h5 class="text-sm font-medium text-gray-700">Uploaded Images ({{ images().length }})</h5>
+            <div class="flex gap-2">
+              <button
+                (click)="exportAsJSON()"
+                class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors gap-1"
+              >
+                Export JSON
+              </button>
+              <button
+                (click)="exportAsCSV()"
+                class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors gap-1"
+              >
+                Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div cdkDropList (cdkDropListDropped)="drop($event)" class="space-y-3">
+            @for (image of images(); track image.id) {
+            <div
+              cdkDrag
+              class="flex items-center gap-4 p-3 bg-white rounded-lg border border-gray-200 hover:border-purple-300 transition-colors"
+            >
+              <div class="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                <img [src]="image.thumbUrl" [alt]="image.fileName" class="w-full h-full object-cover" />
+              </div>
+              <div class="flex-grow min-w-0">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="text-sm font-medium text-gray-900">{{ image.fileName }}</span>
+                  <input
+                    type="text"
+                    [(ngModel)]="image.category"
+                    placeholder="Enter category..."
+                    class="flex-1 text-sm text-gray-900 bg-transparent border-b border-gray-300 focus:border-purple-500 focus:outline-none"
+                  />
+                </div>
+                <div class="flex items-center gap-2">
+                  <a 
+                    [href]="image.url" 
+                    target="_blank" 
+                    class="text-sm text-blue-600 hover:text-blue-800 truncate"
+                    [title]="image.url"
+                  >
+                    {{ image.url }}
+                  </a>
+                  <button
+                    (click)="copyToClipboard(image.url)"
+                    class="p-1 text-gray-400 hover:text-gray-600"
+                    title="Copy URL"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <button
+                (click)="removeImage(image.id)"
+                class="flex-shrink-0 text-gray-400 hover:text-red-500 transition-colors"
+                title="Remove image"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4">
+        <button
+          (click)="processData()"
+          [disabled]="selectedColumns().length === 0"
+          class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 4v16m8-8l-8-8-8 8"
+            ></path>
+          </svg>
+          Export Selected Columns
+        </button>
+
+        <button
+          (click)="downloadProcessedData()"
+          [disabled]="!processedData().length"
+          class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors gap-2"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            ></path>
+          </svg>
+          Download CSV
+        </button>
+      </div>
+    </div>
+    }
+
+    <!-- Original Data Table -->
+    @if (csvData().length > 0) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <h3
+        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
+      >
+        <svg
+          class="w-6 h-6 text-green-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+        Original Data
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+        >
+          {{ csvData().length }} rows
+        </span>
+      </h3>
+      <div class="overflow-x-auto border border-gray-200 rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16"
+              >
+                #
+              </th>
+              @for (header of headers(); track $index) {
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider transition-colors"
+                [class.bg-blue-100]="selectedColumns().includes($index)"
+                [class.text-blue-700]="selectedColumns().includes($index)"
+              >
+                {{ header }}
+              </th>
+              }
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @for (row of csvData(); track $index) {
+            <tr class="hover:bg-gray-50">
+              <td
+                class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500"
+              >
+                {{ $index + 1 }}
+              </td>
+              @for (cell of row; track $index) {
+              <td
+                class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 transition-colors"
+                [class.bg-blue-50]="selectedColumns().includes($index)"
+                [class.border-l-2]="selectedColumns().includes($index)"
+                [class.border-blue-300]="selectedColumns().includes($index)"
+              >
+                @if (processedHeaders()[$index] === 'External image URL') {
+                  <div class="flex items-center gap-2">
+                    @if (cell) {
+                      <img [src]="cell" class="w-10 h-10 object-cover rounded" alt="Preview" 
+                           (error)="$event.target.src='assets/placeholder.png'"/>
+                    }
+                    <div class="flex-1 min-w-0">
+                      <div class="border-2 border-dashed border-gray-300 p-2 rounded cursor-pointer"
+                           [class.border-blue-400]="isDragging()"
+                           [class.bg-blue-50]="isDragging()"
+                           (dragover)="$event.preventDefault()"
+                           (dragenter)="handleDragEnter($event, $index)"
+                           (dragleave)="handleDragLeave($event)"
+                           (drop)="handleDrop($event, row, $index)">
+                        <span class="truncate block">{{ cell || 'Drop image URL here' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                } @else {
+                  {{ cell }}
+                }
+              </td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    }
+    
+    <!-- Exported Data Table -->
+    @if (processedData().length > 0) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+      <h3
+        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
+      >
+        <svg
+          class="w-6 h-6 text-purple-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+        Exported Data
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
+        >
+          {{ processedData().length }} rows
+        </span>
+      </h3>
+      <div class="overflow-x-auto border border-gray-200 rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16"
+              >
+                #
+              </th>
+              @for (header of processedHeaders(); track $index) {
+              <th
+                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                {{ header }}
+              </th>
+              }
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200" cdkDropList (cdkDropListDropped)="onDragRow($event)">
+            @for (row of processedData(); track $index) {
+            <tr class="hover:bg-gray-50" cdkDrag [cdkDragDisabled]="!isExternalImageUrlRow(row)">
+              <td
+                class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500"
+              >
+                {{ $index + 1 }}
+              </td>
+              @for (cell of row; track $index) {
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                @if (processedHeaders()[$index] === 'External image URL') {
+                  <div class="flex items-center gap-2 group" cdkDrag [cdkDragData]="{ row: row, index: $index }">
+                    @if (cell) {
+                      <img [src]="cell" class="w-10 h-10 object-cover rounded" alt="Preview" 
+                           (error)="$event.target.src='assets/placeholder.png'"/>
+                    }
+                    <div class="flex-1 min-w-0">
+                      <div class="relative">
+                        <button
+                          (click)="toggleImageUrlDropdown($index)"
+                          class="w-full flex items-center justify-between border-2 border-dashed border-gray-300 p-2 rounded hover:border-purple-400 hover:bg-purple-50 transition-colors"
+                        >
+                          <span class="truncate block">{{ cell || 'Select image URL' }}</span>
+                          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        @if (activeDropdownIndex() === $index) {
+                          <div class="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg border border-gray-200">
+                            <div class="max-h-48 overflow-y-auto">
+                              @for (image of images(); track image.id) {
+                                <button
+                                  (click)="selectImageUrl(row, $index, image.url)"
+                                  class="w-full px-3 py-2 text-left hover:bg-purple-50 flex items-center gap-2"
+                                >
+                                  <img [src]="image.thumbUrl" class="w-8 h-8 object-cover rounded" [alt]="image.fileName"/>
+                                  <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-gray-900 truncate">{{ image.fileName }}</div>
+                                    <div class="text-xs text-gray-500 truncate">{{ image.url }}</div>
+                                  </div>
+                                </button>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                    <div class="opacity-0 group-hover:opacity-100 cursor-move">
+                      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+                      </svg>
+                    </div>
+                  </div>
+                } @else {
+                  {{ cell }}
+                }
+              </td>
+              }
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+    }
+    }
+
+    @if (csvData().length === 0) {
+    <div class="text-center py-12">
+      <div
+        class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4"
+      >
+        <svg
+          class="w-8 h-8 text-gray-400"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          ></path>
+        </svg>
+      </div>
+      <p class="text-gray-500 text-lg">
+        No data loaded. Please select a CSV or Excel file to get started.
+      </p>
+    </div>
+    }
+  </div>
+</div>
