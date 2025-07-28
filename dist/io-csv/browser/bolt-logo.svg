@@ -1,0 +1,10 @@
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="120" fill="white"/>
+  
+  <!-- Bolt Food text in green -->
+  <text x="50" y="75" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="#34D399">Bolt Food</text>
+  
+  <!-- Decorative dot -->
+  <circle cx="380" cy="95" r="8" fill="#34D399"/>
+</svg>
