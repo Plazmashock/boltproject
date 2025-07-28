@@ -115,6 +115,10 @@ export class App implements OnInit {
   #showImageManagement = signal<boolean>(false);
   #validateBarcodes = signal<boolean>(false);
   #selectedBarcodeColumn = signal<string>('');
+  #applyProperCapitalization = signal<boolean>(false);
+  #trimWhitespace = signal<boolean>(false);
+  #deleteDuplicates = signal<boolean>(false);
+  #selectedDuplicateColumn = signal<string>('');
   #rowImageMap = signal<Record<number, RowImage>>({});
   readonly #images = signal<ImageInfo[]>([]);
   readonly #isUploading = signal<boolean>(false);
@@ -126,6 +130,14 @@ export class App implements OnInit {
   readonly #showImageSelection = signal<boolean>(false);
   readonly #selectedMatchingColumn = signal<string>('');
   readonly #matchingResults = signal<string>('');
+  
+  // Row selection management
+  readonly #selectedRows = signal<Set<number>>(new Set());
+  
+  // Undo/Redo history management
+  readonly #undoHistory = signal<Array<{headers: string[], data: string[][]}>>([]); 
+  readonly #redoHistory = signal<Array<{headers: string[], data: string[][]}>>([]); 
+  readonly #currentHistoryIndex = signal<number>(-1);
 
   // New enhancement signals
   readonly #errorState = signal<ErrorState>({
@@ -134,9 +146,12 @@ export class App implements OnInit {
     networkError: null,
     validationError: null
   });
-  readonly #isDarkMode = signal<boolean>(false);
   readonly #processingHistory = signal<ProcessingHistory[]>([]);
   readonly #isProcessing = signal<boolean>(false);
+  readonly #isProviderProcessing = signal<boolean>(false);
+  readonly #isDownloading = signal<boolean>(false);
+  readonly #processingStatus = signal<string>('');
+  readonly #hasProcessedData = signal<boolean>(false);
   readonly #showImageMatching = signal<boolean>(false);
   readonly #fileSize = signal<number>(0);
   readonly #processingProgress = signal<number>(0);
@@ -168,6 +183,10 @@ export class App implements OnInit {
   readonly showImageManagement = computed(() => this.mode() === 'provider');
   readonly validateBarcodes = computed(() => this.#validateBarcodes());
   readonly selectedBarcodeColumn = computed(() => this.#selectedBarcodeColumn());
+  readonly applyProperCapitalization = computed(() => this.#applyProperCapitalization());
+  readonly trimWhitespace = computed(() => this.#trimWhitespace());
+  readonly deleteDuplicates = computed(() => this.#deleteDuplicates());
+  readonly selectedDuplicateColumn = computed(() => this.#selectedDuplicateColumn());
   readonly rowImageMap = computed(() => this.#rowImageMap());
   readonly images = computed(() => this.#images());
   readonly isUploading = computed(() => this.#isUploading());
@@ -175,6 +194,21 @@ export class App implements OnInit {
   readonly imageSearchQuery = computed(() => this.#imageSearchQuery());
   readonly selectedMatchingColumn = computed(() => this.#selectedMatchingColumn());
   readonly matchingResults = computed(() => this.#matchingResults());
+  readonly undoHistory = computed(() => this.#undoHistory());
+  readonly redoHistory = computed(() => this.#redoHistory());
+  readonly canUndo = computed(() => this.#undoHistory().length > 0);
+  readonly canRedo = computed(() => this.#redoHistory().length > 0);
+  readonly selectedRows = computed(() => this.#selectedRows());
+  readonly isAllRowsSelected = computed(() => {
+    const totalRows = this.csvData().length;
+    const selectedCount = this.#selectedRows().size;
+    return totalRows > 0 && selectedCount === totalRows;
+  });
+  readonly isSomeRowsSelected = computed(() => {
+    const selectedCount = this.#selectedRows().size;
+    return selectedCount > 0 && selectedCount < this.csvData().length;
+  });
+  readonly selectedRowCount = computed(() => this.#selectedRows().size);
   readonly filteredImages = computed(() => {
     const query = this.#imageSearchQuery().toLowerCase();
     if (!query) return this.#images();
@@ -190,9 +224,12 @@ export class App implements OnInit {
 
   // New computed signals for enhancements
   readonly errorState = computed(() => this.#errorState());
-  readonly isDarkMode = computed(() => this.#isDarkMode());
   readonly processingHistory = computed(() => this.#processingHistory());
   readonly isProcessing = computed(() => this.#isProcessing());
+  readonly isProviderProcessing = computed(() => this.#isProviderProcessing());
+  readonly isDownloading = computed(() => this.#isDownloading());
+  readonly processingStatus = computed(() => this.#processingStatus());
+  readonly hasProcessedData = computed(() => this.#hasProcessedData());
   readonly showImageMatching = computed(() => this.#showImageMatching());
   readonly processingProgress = computed(() => this.#processingProgress());
   
@@ -244,26 +281,11 @@ export class App implements OnInit {
   constructor() {
     // Use afterNextRender to ensure we're in the browser
     afterNextRender(() => {
-      // Initialize dark mode from localStorage
-      const savedDarkMode = localStorage.getItem('toolkit-dark-mode');
-      if (savedDarkMode === 'true') {
-        this.#isDarkMode.set(true);
-      }
-      
       // Load processing history from localStorage
       this.#loadProcessingHistory();
       
       // Set up beforeunload warning to prevent accidental data loss
       this.#setupBeforeUnloadWarning();
-
-      // Apply dark mode class effect - only in browser
-      effect(() => {
-        const isDark = this.#isDarkMode();
-        console.log('Dark mode effect triggered, isDark:', isDark);
-        document.documentElement.classList.toggle('dark', isDark);
-        localStorage.setItem('toolkit-dark-mode', isDark.toString());
-        console.log('Applied dark class to documentElement, classList:', document.documentElement.classList.toString());
-      });
     });
   }
 
@@ -274,6 +296,7 @@ export class App implements OnInit {
     this.#showImageManagement.set(mode === 'provider');
     this.#validateBarcodes.set(false);
     this.#selectedBarcodeColumn.set('');
+    this.#hasProcessedData.set(false);
   };
 
   clearMode = (): void => {
@@ -285,10 +308,18 @@ export class App implements OnInit {
     this.#selectedBarcodeColumn.set('');
     this.#processedData.set([]);
     this.#processedHeaders.set([]);
+    this.#hasProcessedData.set(false);
   };
 
   ngOnInit = (): void => {
     this.#setSeoMetaTags();
+    
+    // Auto-resize textareas when data changes
+    effect(() => {
+      if (this.csvData().length > 0) {
+        setTimeout(() => this.autoResizeAllTextareas(), 100);
+      }
+    });
   };
 
   #setSeoMetaTags = (): void => {
@@ -310,8 +341,12 @@ export class App implements OnInit {
     const file = input.files?.[0];
     if (!file) return;
 
-    // Clear previous errors
+    // Clear previous errors and reset processing state
     this.#clearErrors();
+    this.#hasProcessedData.set(false);
+    this.#processedData.set([]);
+    this.#processedHeaders.set([]);
+    this.#selectedRows.set(new Set()); // Clear row selection
 
     // Enhanced file validation
     const validationError = this.#validateFile(file);
@@ -448,16 +483,6 @@ export class App implements OnInit {
     // In a real app, you'd implement OnDestroy and clean up there
   };
 
-  // Toggle dark mode
-  toggleDarkMode = (): void => {
-    console.log('Toggle dark mode clicked, current state:', this.#isDarkMode());
-    this.#isDarkMode.update(current => {
-      const newValue = !current;
-      console.log('Updating dark mode to:', newValue);
-      return newValue;
-    });
-  };
-
   // Toggle image matching section
   toggleImageMatching = (): void => {
     this.#showImageMatching.update(current => !current);
@@ -577,6 +602,11 @@ export class App implements OnInit {
                 // All batches processed
                 this.#csvData.set(allData);
                 this.#processingProgress.set(100);
+                
+                // Initialize undo/redo history for new file
+                this.#undoHistory.set([]);
+                this.#redoHistory.set([]);
+                
                 resolve();
               }
             } catch (error) {
@@ -661,6 +691,8 @@ export class App implements OnInit {
       return;
     }
 
+    this.#isDownloading.set(true);
+
     try {
       const csvContent = this.#generateCsvContent(headers, data);
       const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -678,6 +710,9 @@ export class App implements OnInit {
     } catch (error) {
       console.error('Error generating CSV:', error);
       this.#setError('processingError', 'Failed to generate CSV file for download');
+    } finally {
+      // Reset download state after a short delay
+      setTimeout(() => this.#isDownloading.set(false), 1000);
     }
   };
 
@@ -720,14 +755,69 @@ export class App implements OnInit {
     const selected = this.selectedColumns();
     if (!selected.length) return;
 
-    const headers = this.headers();
-    const csvData = this.csvData();
+    this.#isProcessing.set(true);
+    this.#processingStatus.set('');
 
-    const newHeaders = selected.map(i => headers[i]);
-    const newData = csvData.map(row => selected.map(i => row[i]));
+    // Use setTimeout to allow UI to update
+    setTimeout(() => {
+      try {
+        const headers = this.headers();
+        const csvData = this.csvData();
 
-    this.#processedHeaders.set(newHeaders);
-    this.#processedData.set(newData);
+        const newHeaders = selected.map(i => headers[i]);
+        let newData = csvData.map(row => selected.map(i => row[i]));
+
+        // Apply trim whitespace if enabled
+        if (this.trimWhitespace()) {
+          newData = newData.map(row => 
+            row.map(cell => typeof cell === 'string' ? cell.trim() : cell)
+          );
+        }
+
+        // Apply delete duplicates if enabled
+        if (this.deleteDuplicates() && this.selectedDuplicateColumn()) {
+          const originalHeaderIndex = headers.indexOf(this.selectedDuplicateColumn());
+          const duplicateColumnIndex = selected.indexOf(originalHeaderIndex);
+          
+          if (duplicateColumnIndex !== -1) {
+            const seen = new Set<string>();
+            const originalLength = newData.length;
+            newData = newData.filter(row => {
+              const value = String(row[duplicateColumnIndex] || '').toLowerCase().trim();
+              if (seen.has(value)) {
+                return false;
+              }
+              seen.add(value);
+              return true;
+            });
+          }
+        }
+
+        // Apply proper capitalization if enabled
+        if (this.applyProperCapitalization()) {
+          newData = newData.map(row => 
+            row.map(cell => {
+              if (typeof cell === 'string') {
+                return this.applyTitleCase(cell);
+              }
+              return cell;
+            })
+          );
+        }
+
+        this.#processedHeaders.set(newHeaders);
+        this.#processedData.set(newData);
+        this.#hasProcessedData.set(true);
+
+        // Show success message
+        this.#processingStatus.set(`✅ Successfully processed ${selected.length} columns with ${newData.length} rows`);
+        
+        // Clear status after 3 seconds
+        setTimeout(() => this.#processingStatus.set(''), 3000);
+      } finally {
+        this.#isProcessing.set(false);
+      }
+    }, 100);
   };
 
     // Image management methods
@@ -827,6 +917,54 @@ export class App implements OnInit {
   openImageAssignment(rowIndex: number) {
     this.#selectedColumn.set(rowIndex);
     this.#showImageSelection.set(true);
+  }
+
+  // Cell editing methods
+  updateCellValue(rowIndex: number, cellIndex: number, value: string) {
+    this.#csvData.update(data => {
+      const newData = [...data];
+      if (newData[rowIndex]) {
+        newData[rowIndex] = [...newData[rowIndex]];
+        newData[rowIndex][cellIndex] = value;
+      }
+      return newData;
+    });
+    
+    // Auto-resize textarea after content update
+    setTimeout(() => this.autoResizeTextarea(rowIndex, cellIndex), 0);
+  }
+
+  onCellBlur(rowIndex: number, cellIndex: number) {
+    // Optional: Add validation or formatting logic here
+    console.log(`Cell updated at row ${rowIndex}, column ${cellIndex}`);
+  }
+
+  private autoResizeTextarea(rowIndex: number, cellIndex: number) {
+    if (isPlatformBrowser(this.platformId)) {
+      // Find the specific textarea element
+      const textareas = document.querySelectorAll(`tbody tr:nth-child(${rowIndex + 1}) td:nth-child(${cellIndex + 2}) textarea`);
+      if (textareas.length > 0) {
+        const textarea = textareas[0] as HTMLTextAreaElement;
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.max(40, textarea.scrollHeight) + 'px';
+      }
+    }
+  }
+
+  autoResizeOnInput(event: any) {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.max(40, textarea.scrollHeight) + 'px';
+  }
+
+  private autoResizeAllTextareas() {
+    if (isPlatformBrowser(this.platformId)) {
+      const textareas = document.querySelectorAll('tbody textarea');
+      textareas.forEach((textarea: any) => {
+        textarea.style.height = 'auto';
+        textarea.style.height = Math.max(40, textarea.scrollHeight) + 'px';
+      });
+    }
   }
 
   assignImageToRow(image: ImageInfo) {
@@ -1019,8 +1157,146 @@ export class App implements OnInit {
     this.#showImageManagement.set(value);
   };
 
+  updateApplyProperCapitalization = (value: boolean): void => {
+    this.#applyProperCapitalization.set(value);
+  };
+
+  updateTrimWhitespace = (value: boolean): void => {
+    this.#trimWhitespace.set(value);
+  };
+
+  updateDeleteDuplicates = (value: boolean): void => {
+    this.#deleteDuplicates.set(value);
+  };
+
+  updateSelectedDuplicateColumn = (value: string): void => {
+    this.#selectedDuplicateColumn.set(value);
+  };
+
   updateSelectedBarcodeColumn = (value: string): void => {
     this.#selectedBarcodeColumn.set(value);
+  };
+
+  // Undo/Redo functionality
+  private saveToHistory = (): void => {
+    const currentState = {
+      headers: [...this.headers()],
+      data: this.csvData().map(row => [...row])
+    };
+    
+    this.#undoHistory.update(history => [...history, currentState]);
+    // Clear redo history when new action is performed
+    this.#redoHistory.set([]);
+    
+    // Limit history size to prevent memory issues (keep last 50 states)
+    if (this.#undoHistory().length > 50) {
+      this.#undoHistory.update(history => history.slice(-50));
+    }
+  };
+
+  undo = (): void => {
+    const history = this.#undoHistory();
+    if (history.length === 0) return;
+
+    // Save current state to redo history
+    const currentState = {
+      headers: [...this.headers()],
+      data: this.csvData().map(row => [...row])
+    };
+    this.#redoHistory.update(redoHistory => [...redoHistory, currentState]);
+
+    // Get and apply the last state from undo history
+    const lastState = history[history.length - 1];
+    this.#headers.set([...lastState.headers]);
+    this.#csvData.set(lastState.data.map(row => [...row]));
+
+    // Remove the last state from undo history
+    this.#undoHistory.update(history => history.slice(0, -1));
+
+    // Clear processed data since original data changed
+    this.#processedData.set([]);
+    this.#processedHeaders.set([]);
+    this.#hasProcessedData.set(false);
+  };
+
+  redo = (): void => {
+    const redoHistory = this.#redoHistory();
+    if (redoHistory.length === 0) return;
+
+    // Save current state to undo history
+    const currentState = {
+      headers: [...this.headers()],
+      data: this.csvData().map(row => [...row])
+    };
+    this.#undoHistory.update(history => [...history, currentState]);
+
+    // Get and apply the last state from redo history
+    const redoState = redoHistory[redoHistory.length - 1];
+    this.#headers.set([...redoState.headers]);
+    this.#csvData.set(redoState.data.map(row => [...row]));
+
+    // Remove the last state from redo history
+    this.#redoHistory.update(redoHistory => redoHistory.slice(0, -1));
+
+    // Clear processed data since original data changed
+    this.#processedData.set([]);
+    this.#processedHeaders.set([]);
+    this.#hasProcessedData.set(false);
+  };
+
+  // Row selection methods
+  toggleRowSelection = (rowIndex: number): void => {
+    this.#selectedRows.update(selected => {
+      const newSelected = new Set(selected);
+      if (newSelected.has(rowIndex)) {
+        newSelected.delete(rowIndex);
+      } else {
+        newSelected.add(rowIndex);
+      }
+      return newSelected;
+    });
+  };
+
+  toggleAllRows = (): void => {
+    const totalRows = this.csvData().length;
+    const allSelected = this.isAllRowsSelected();
+    
+    if (allSelected) {
+      // Deselect all
+      this.#selectedRows.set(new Set());
+    } else {
+      // Select all
+      const allIndices = Array.from({ length: totalRows }, (_, i) => i);
+      this.#selectedRows.set(new Set(allIndices));
+    }
+  };
+
+  deleteSelectedRows = (): void => {
+    const selectedRows = this.#selectedRows();
+    if (selectedRows.size === 0) return;
+
+    // Save current state to history before deleting
+    this.saveToHistory();
+
+    // Filter out selected rows (convert to array and sort in descending order)
+    const selectedIndices = Array.from(selectedRows).sort((a, b) => b - a);
+    let newData = [...this.csvData()];
+    
+    // Remove rows from highest index to lowest to maintain indices
+    selectedIndices.forEach(index => {
+      newData.splice(index, 1);
+    });
+
+    // Update the data
+    this.#csvData.set(newData);
+    
+    // Clear selection
+    this.#selectedRows.set(new Set());
+    
+    // Clear processed data since original data changed
+    this.#processedData.set([]);
+    this.#processedHeaders.set([]);
+    this.#hasProcessedData.set(false);
   };
 
   handleDragEnter = (event: DragEvent, columnIndex: number): void => {
@@ -1115,21 +1391,120 @@ export class App implements OnInit {
     void this.#downloadFile(blob, 'images.csv');
   };
 
+  // Helper method for proper capitalization (title case)
+  private applyTitleCase = (text: string): string => {
+    if (!text || typeof text !== 'string') return text;
+    
+    // Check if text contains Georgian characters (Unicode range U+10A0-U+10FF)
+    const georgianRegex = /[\u10A0-\u10FF]/;
+    if (georgianRegex.test(text)) {
+      return text; // Return unchanged if Georgian characters are found
+    }
+    
+    // Words that should remain lowercase unless they're the first word
+    const lowercaseWords = ['a', 'an', 'and', 'at', 'but', 'by', 'for', 'in', 'nor', 'of', 'on', 'or', 'so', 'the', 'to', 'up', 'yet'];
+    
+    return text
+      .toLowerCase()
+      .split(' ')
+      .map((word, index) => {
+        // Always capitalize the first word
+        if (index === 0) {
+          return word.charAt(0).toUpperCase() + word.slice(1);
+        }
+        
+        // Check if it's a lowercase word that should remain lowercase
+        if (lowercaseWords.includes(word)) {
+          return word;
+        }
+        
+        // Capitalize all other words
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
+  };
+
   // Provider Menu specific methods
   processProviderData = (): void => {
-    // For provider mode, we process all data (no column selection needed)
-    const headers = this.headers();
-    const csvData = this.csvData();
-    
-    // Process all columns for provider mode
-    this.#processedHeaders.set(headers);
-    this.#processedData.set(csvData);
-    
-    // Initialize enhanced data processing
-    if (csvData.length > 0 && headers.length > 0) {
-      this.inferDataTypes();
-      this.#updatePreview();
-    }
+    this.#isProviderProcessing.set(true);
+    this.#processingStatus.set('');
+
+    // Use setTimeout to allow UI to update
+    setTimeout(() => {
+      try {
+        // Save current state to history before making changes
+        this.saveToHistory();
+        
+        // For provider mode, we process all data (no column selection needed)
+        const headers = this.headers();
+        let csvData = this.csvData();
+        
+        let statusMessage = `✅ Successfully processed all ${headers.length} columns with ${csvData.length} rows`;
+        
+        // Apply trim whitespace if enabled
+        if (this.trimWhitespace()) {
+          csvData = csvData.map(row => 
+            row.map(cell => cell.trim())
+          );
+          
+          // Update the original data with the trimmed version
+          this.#csvData.set(csvData);
+          statusMessage += ' (with whitespace trimmed)';
+        }
+
+        // Apply delete duplicates if enabled
+        if (this.deleteDuplicates() && this.selectedDuplicateColumn()) {
+          const duplicateColumnIndex = headers.indexOf(this.selectedDuplicateColumn());
+          if (duplicateColumnIndex !== -1) {
+            const seen = new Set<string>();
+            const originalLength = csvData.length;
+            csvData = csvData.filter(row => {
+              const value = String(row[duplicateColumnIndex] || '').toLowerCase().trim();
+              if (seen.has(value)) {
+                return false;
+              }
+              seen.add(value);
+              return true;
+            });
+            
+            // Update the original data with duplicates removed
+            this.#csvData.set(csvData);
+            const removedCount = originalLength - csvData.length;
+            statusMessage += ` (${removedCount} duplicates removed)`;
+          }
+        }
+        
+        // Apply proper capitalization if enabled
+        if (this.applyProperCapitalization()) {
+          csvData = csvData.map(row => 
+            row.map(cell => this.applyTitleCase(cell))
+          );
+          
+          // Update the original data with the capitalized version
+          this.#csvData.set(csvData);
+          statusMessage += ' (with proper capitalization applied)';
+        }
+        
+        // Process all columns for provider mode
+        this.#processedHeaders.set(headers);
+        this.#processedData.set(csvData);
+        this.#hasProcessedData.set(true);
+        
+        // Initialize enhanced data processing
+        if (csvData.length > 0 && headers.length > 0) {
+          this.inferDataTypes();
+          this.#updatePreview();
+        }
+
+        // Show success message
+        this.#processingStatus.set(statusMessage);
+        
+        // Clear status after 4 seconds
+        setTimeout(() => this.#processingStatus.set(''), 4000);
+      } finally {
+        this.#isProviderProcessing.set(false);
+      }
+    }, 100);
   };
 
   downloadProviderCSV = (): void => {
@@ -1139,39 +1514,35 @@ export class App implements OnInit {
 
     if (!headers?.length || !data?.length) return;
 
-    // Create modified data with image links
-    const modifiedData = data.map((row, rowIndex) => {
-      const rowWithImage = [...row];
-      
-      // If this row has an assigned image, add the image link
-      if (rowImages[rowIndex]) {
-        // Add image link as the last column
-        rowWithImage.push(rowImages[rowIndex].url);
-      } else {
-        // Add empty string if no image assigned
-        rowWithImage.push('');
-      }
-      
-      return rowWithImage;
-    });
+    this.#isDownloading.set(true);
 
-    // Add "Image Link" to headers
-    const modifiedHeaders = [...headers, 'Image Link'];
+    try {
+      // Create modified data with image links
+      const modifiedData = data.map((row, rowIndex) => {
+        const rowWithImage = [...row];
+        
+        // If this row has an assigned image, add the image link
+        if (rowImages[rowIndex]) {
+          // Add image link as the last column
+          rowWithImage.push(rowImages[rowIndex].url);
+        } else {
+          // Add empty string if no image assigned
+          rowWithImage.push('');
+        }
+        
+        return rowWithImage;
+      });
 
-    const csvContent = this.#generateCsvContent(modifiedHeaders, modifiedData);
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    void this.#downloadFile(blob, `provider_${this.fileName()}`);
-  };
+      // Add "Image Link" to headers
+      const modifiedHeaders = [...headers, 'Image Link'];
 
-  onRowClick = (rowIndex: number): void => {
-    // Only for provider mode - allow clicking anywhere on row to assign image
-    if (this.mode() === 'provider') {
-      this.openImageAssignment(rowIndex);
+      const csvContent = this.#generateCsvContent(modifiedHeaders, modifiedData);
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      void this.#downloadFile(blob, `provider_${this.fileName()}`);
+    } finally {
+      // Reset download state after a short delay
+      setTimeout(() => this.#isDownloading.set(false), 1000);
     }
-  };
-
-  stopPropagation = (event: Event): void => {
-    event.stopPropagation();
   };
 
   // Scroll to specific section in Provider Menu

@@ -40,11 +40,6 @@
           "options": {
             "allowedCommonJsDependencies": ["exceljs"],
             "browser": "src/main.ts",
-            "ssr": {
-              "entry": "src/main.server.ts"
-            },
-            "server": "src/server.ts",
-            "outputMode": "static",
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
