@@ -13,12 +13,27 @@
 
 **Toolkit for WMS** is a sophisticated web-based internal tool designed for warehouse management systems to streamline CSV file processing. Built with modern Angular architecture, it provides an intuitive interface for data transformation, column mapping, image management, and export capabilities.
 
+## 🌐 Live Demo
+
+🚀 **[Try it live at https://wms-io.web.app](https://wms-io.web.app)**
+
+*Latest update includes: Delete duplicates, trim whitespace, comprehensive undo/redo system, and row selection functionality*
+
 ## ✨ Features
 
 ### 🔄 **CSV Processing**
 - **Multi-format Support**: Import CSV and Excel files seamlessly
 - **Intelligent Parsing**: Handles various CSV formats with quote escaping
 - **Real-time Preview**: Live data preview with row counting
+- **Delete Duplicates**: Remove duplicate entries based on selected columns
+- **Trim Whitespace**: Remove leading and trailing spaces from text fields
+- **Proper Capitalization**: Apply title case formatting (excludes Georgian text)
+
+### 🗂️ **Data Management**
+- **Undo/Redo System**: Comprehensive history tracking (up to 50 states)
+- **Row Selection**: Individual and bulk row selection with checkboxes
+- **Bulk Delete**: Remove multiple selected rows at once
+- **Data Integrity**: Automatic state saving before destructive operations
 
 ### 🏷️ **Header Management**
 - **Smart Mapping**: Rename headers using predefined mappings (e.g., Georgian → English)
@@ -32,7 +47,7 @@
 - **External Hosting**: Integration with ImgBB for reliable image storage
 
 ### 🎯 **Processing Modes**
-- **Provider Menu Mode**: Full image assignment capabilities
+- **Provider Menu Mode**: Full image assignment capabilities with all processing options
 - **3P Assortments Mode**: Restricted image assignment for data integrity
 
 ### 📊 **Data Export**
@@ -41,6 +56,7 @@
 - **Data Validation**: Ensure data integrity before export
 
 ### 🎨 **User Experience**
+- **Modern UI**: Glass effects, backdrop blur, and static wave backgrounds
 - **Responsive Design**: Mobile-friendly interface with Tailwind CSS
 - **Smooth Animations**: Enhanced transitions and hover effects
 - **Dark/Light Themes**: Adaptive color schemes
@@ -116,15 +132,26 @@
    - Click "Export CSV" to download processed data
    - Files are properly formatted and ready for use
 
+## 🆕 Recent Updates
+
+### v2.0.0 - Major Feature Release
+- **🗑️ Delete Duplicates**: Remove duplicate entries based on any column
+- **✂️ Trim Whitespace**: Clean up text data by removing extra spaces
+- **↩️ Undo/Redo System**: Comprehensive history tracking with 50-state memory
+- **☑️ Row Selection**: Individual and bulk row selection with checkboxes
+- **🎨 UI Enhancements**: Glass effects, static backgrounds, improved responsiveness
+- **🔧 Technical**: Modern Angular 20+ signals architecture
+
 ## 🛠️ Technical Stack
 
 - **Frontend Framework**: Angular 20+ with Standalone Components
 - **Language**: TypeScript 5.8+
 - **Styling**: Tailwind CSS 4.1+
-- **State Management**: Angular Signals
+- **State Management**: Angular Signals (Reactive Programming)
 - **File Processing**: ExcelJS for Excel support
 - **HTTP Client**: Angular HttpClient
 - **Image Hosting**: ImgBB API integration
+- **Deployment**: Firebase Hosting
 
 ## 🏗️ Project Structure
 
