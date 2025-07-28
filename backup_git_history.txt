@@ -1,0 +1,10 @@
+2208f85 💾 BACKUP: Provider Menu simplified interface - Production ready deployment
+2c3f924 feat: Enhanced data processing interface with comprehensive transformation tools
+afdd3ad 📚 Add comprehensive README.md and project documentation
+5e4dd2d 💾 BACKUP: Complete Toolkit for WMS with enhanced transitions, auto-matching, and image management
+43b7e34 feat: update titles and descriptions for CSV column processing; add new meta image
+44bad0e feat: enhance application with server-side rendering and SEO improvements
+2bbe2ba Add Firebase files to .gitignore and remove from tracking
+d34f0ac feat: remove sample Excel and CSV files; update hosting cache
+a3d2eeb feat: integrate Tailwind CSS for styling and remove legacy CSS
+03a38f7 feat: Update app interface and processing logic for CSV/Excel files; add Georgian headers test data
