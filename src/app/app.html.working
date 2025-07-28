@@ -144,15 +144,10 @@
             </svg>
           </div>
           <div>
-            @if (mode() === 'provider') {
-            <h2 class="text-2xl font-bold text-gray-900">Provider Menu</h2>
-            <p class="text-gray-600">Manage and assign images to your data</p>
-            } @else {
             <h2 class="text-2xl font-bold text-gray-900">Column Selection</h2>
             <p class="text-gray-600">Choose which columns to include in your export</p>
-            }
           </div>
-          @if (selectedColumns().length > 0 && mode() === '3p') {
+          @if (selectedColumns().length > 0) {
           <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg border border-green-200">
             <span class="text-sm font-semibold">{{ selectedColumns().length }} selected</span>
           </div>

@@ -1,259 +1,782 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+<div class="min-h-screen bg-gray-50 transition-colors duration-300">
   <!-- Header -->
-  <div class="bg-white shadow-sm border-b">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
-        <div
-          class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"
-        >
-          <svg
-            class="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+  <div class="bg-white shadow-sm border-b border-gray-200 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div class="text-center relative">
+        <!-- Dark Mode Toggle -->
+        <div class="absolute top-0 right-0">
+          <button
+            (click)="toggleDarkMode()"
+            class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors duration-300"
+            title="Toggle dark mode"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            ></path>
-          </svg>
+            @if (isDarkMode()) {
+              <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
+              </svg>
+            } @else {
+              <svg class="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd"/>
+              </svg>
+            }
+          </button>
         </div>
-        CSV Column Processor
-      </h1>
-      <p class="mt-2 text-gray-600">
-        Select, process and export your data with professional tools
-      </p>
+        
+        <div class="inline-flex items-center justify-center mb-4">
+          <img src="/Bolt-Food_logo-horisontal_CMYK.png" alt="Toolkit for WMS Logo" class="w-120 h-40 object-contain">
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-2 mobile-text-lg">Toolkit for WMS</h1>
+        <p class="text-lg text-gray-600 mobile-text-sm">Transform your data with ease and precision</p>
+      </div>
     </div>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Upload Section -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-      <div class="text-center">
-        <div
-          class="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4"
-        >
-          <svg
-            class="w-8 h-8 text-blue-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            ></path>
-          </svg>
-        </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">
-          Upload Your File
-        </h3>
-        <p class="text-gray-600 mb-6">
-          Select a CSV or Excel file to get started
-        </p>
-
-        <input
-          type="file"
-          (input)="uploadFile($event)"
-          accept=".csv,.xlsx,.xls"
-          #fileInput
-          class="hidden"
-        />
-        <button
-          (click)="fileInput.click()"
-          class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors gap-2"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
-            ></path>
-          </svg>
-          Choose File
-        </button>
-        <p class="mt-3 text-sm text-gray-500">
-          Supports CSV, XLS, and XLSX files
-        </p>
-
-        @if (fileName()) {
-        <div
-          class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200"
-        >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
-          File loaded: {{ fileName() }}
-        </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 mobile-p-4">
+    
+    <!-- Error Messages -->
+    @if (errorState().fileError || errorState().processingError || errorState().networkError || errorState().validationError) {
+      <div class="mb-6">
+        @if (errorState().fileError) {
+          <div class="error-message bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/>
+              </svg>
+              <div class="flex-1">
+                <h4 class="text-red-800 font-medium">File Error</h4>
+                <p class="text-red-700 text-sm mt-1">{{ errorState().fileError }}</p>
+              </div>
+              <button 
+                (click)="clearError('fileError')"
+                class="text-red-500 hover:text-red-700 ml-4"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+        
+        @if (errorState().processingError) {
+          <div class="error-message bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/>
+              </svg>
+              <div class="flex-1">
+                <h4 class="text-red-800 font-medium">Processing Error</h4>
+                <p class="text-red-700 text-sm mt-1">{{ errorState().processingError }}</p>
+              </div>
+              <button 
+                (click)="clearError('processingError')"
+                class="text-red-500 hover:text-red-700 ml-4"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        }
+        
+        @if (errorState().validationError) {
+          <div class="error-message bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-yellow-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/>
+              </svg>
+              <div class="flex-1">
+                <h4 class="text-yellow-800 font-medium">Warning</h4>
+                <p class="text-yellow-700 text-sm mt-1">{{ errorState().validationError }}</p>
+              </div>
+              <button 
+                (click)="clearError('validationError')"
+                class="text-yellow-500 hover:text-yellow-700 ml-4"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
         }
       </div>
-    </div>
+    }
 
-    @if (csvData().length > 0) {
+    <!-- Processing Progress -->
+    @if (isProcessing()) {
+      <div class="mb-6 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900">Processing File</h3>
+          <span class="text-sm text-gray-600">{{ processingProgress() }}%</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <div 
+            class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full progress-slide transition-all duration-300"
+            [style.width.%]="processingProgress()"
+          ></div>
+        </div>
+        <p class="text-sm text-gray-600 mt-2">Please wait while we process your file...</p>
+      </div>
+    }
+
+    <!-- File Success Message -->
+    @if (fileName()) {
+      <div class="mb-8 p-4 bg-green-50 border border-green-200 rounded-xl success-message">
+        <div class="flex items-center mobile-stack mobile-gap-2">
+          <div class="flex-shrink-0">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-3 flex-1">
+            <p class="text-sm font-medium text-green-800">File loaded successfully</p>
+            <p class="text-sm text-green-700">{{ fileName() }}</p>
+          </div>
+          @if (dataStats()) {
+            <div class="ml-4 text-xs text-green-600 mobile-hidden">
+              <span class="mr-3">{{ dataStats()?.totalRows }} rows</span>
+              <span class="mr-3">{{ dataStats()?.totalColumns }} columns</span>
+              <span>{{ dataStats()?.fileSize }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Data Statistics Panel -->
+    @if (dataStats()) {
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          Data Overview
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mobile-stack">
+          <div class="bg-blue-50 rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-blue-600">{{ (dataStats()?.totalRows || 0).toLocaleString() }}</div>
+            <div class="text-sm text-blue-800">Total Rows</div>
+          </div>
+          <div class="bg-green-50 rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-green-600">{{ dataStats()?.totalColumns || 0 }}</div>
+            <div class="text-sm text-green-800">Columns</div>
+          </div>
+          <div class="bg-purple-50 rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-purple-600">{{ dataStats()?.fileSize || '0 Bytes' }}</div>
+            <div class="text-sm text-purple-800">File Size</div>
+          </div>
+          <div class="bg-orange-50 rounded-lg p-4 text-center">
+            <div class="text-2xl font-bold text-orange-600">{{ dataStats()?.duplicateRows || 0 }}</div>
+            <div class="text-sm text-orange-800">Duplicates</div>
+          </div>
+        </div>
+        @if (dataStats() && dataStats()!.emptyColumns > 0) {
+          <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-yellow-500 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495z" clip-rule="evenodd"/>
+              </svg>
+              <span class="text-sm text-yellow-800">
+                Warning: {{ dataStats()!.emptyColumns }} empty columns detected
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Upload Section -->
+    @if (!fileName()) {
+      <!-- Full upload section when no file is selected -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8 mobile-p-4">
+        <div class="text-center max-w-lg mx-auto">
+          <div class="mx-auto w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-lg pulse-glow" style="background: linear-gradient(135deg, #2a9c64 0%, #0c2c1c 100%);">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-3 mobile-text-lg">Upload Your Data</h2>
+          <p class="text-gray-600 mb-8 mobile-text-sm mobile-mb-4">Select a CSV or Excel file to get started with data processing</p>
+          
+          <div class="relative">
+            <input 
+              id="file-upload"
+              type="file" 
+              (change)="uploadFile($event)" 
+              accept=".csv,.xlsx,.xls"
+              class="sr-only"
+              [disabled]="isProcessing()"
+            />
+            <label 
+              for="file-upload" 
+              class="inline-flex items-center px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 ease-in-out gap-2 cursor-pointer shadow-md hover:shadow-lg transform hover:scale-105 mobile-full mobile-justify-center"
+              [class.opacity-50]="isProcessing()"
+              [class.cursor-not-allowed]="isProcessing()"
+              style="background: #2a9c64;"
+            >
+              @if (isProcessing()) {
+                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              } @else {
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>
+                </svg>
+                Choose File
+              }
+            </label>
+          </div>
+          <div class="mt-4 text-sm text-gray-500">
+            <p class="mobile-text-xs">Supports CSV, XLS, and XLSX files</p>
+            <p class="mobile-text-xs mt-1">Maximum file size: 50MB</p>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- Compact upload section when file is selected -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex items-center justify-between mobile-stack mobile-gap-2">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #2a9c64 0%, #0c2c1c 100%);">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <span class="text-sm font-medium text-gray-700">Change File</span>
+          </div>
+          
+          <div class="relative">
+            <input 
+              id="file-upload-compact"
+              type="file" 
+              (change)="uploadFile($event)" 
+              accept=".csv,.xlsx,.xls"
+              class="sr-only"
+              [disabled]="isProcessing()"
+            />
+            <label 
+              for="file-upload-compact" 
+              class="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-md transition-all duration-300 ease-in-out gap-2 cursor-pointer transform hover:scale-105 mobile-full mobile-justify-center"
+              [class.opacity-50]="isProcessing()"
+              [class.cursor-not-allowed]="isProcessing()"
+              style="background: #2a9c64;"
+            >
+              @if (isProcessing()) {
+                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              } @else {
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                </svg>
+                Upload New File
+              }
+            </label>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Processing History Panel -->
+    @if (processingHistory().length > 0) {
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Recent Processing History
+          </h3>
+          <span class="text-sm text-gray-500">Last {{ processingHistory().length }} exports</span>
+        </div>
+        <div class="space-y-3">
+          @for (entry of processingHistory().slice(0, 5); track entry.id) {
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors mobile-stack mobile-gap-2">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                  <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900">{{ entry.fileName }}</p>
+                  <p class="text-xs text-gray-500">{{ entry.totalRows.toLocaleString() }} rows, {{ entry.columnsProcessed }} columns - {{ entry.mode }}</p>
+                </div>
+              </div>
+              <div class="text-xs text-gray-500 mobile-full mobile-text-center">
+                {{ entry.timestamp.toLocaleDateString() }} {{ entry.timestamp.toLocaleTimeString() }}
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+  @if (csvData().length > 0) {
     <!-- Mode Selection -->
-    @if (!selectedMode()) {
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-      <h3 class="text-xl font-semibold text-gray-900 mb-6">Select Processing Mode</h3>
-      <div class="flex gap-4">
+    @if (!mode()) {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8 mobile-p-4">
+      <div class="text-center max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold text-gray-900 mb-3 mobile-text-lg">Choose Your Workflow</h2>
+        <p class="text-gray-600 mb-8 mobile-text-sm mobile-mb-4">Select the processing mode that best fits your needs</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mobile-gap-4">
+          <button
+            (click)="setMode('3p')"
+            class="group p-6 mobile-p-4 bg-white border-2 border-gray-200 hover:border-green-500 rounded-xl transition-all duration-300 ease-in-out text-left hover:shadow-lg transform hover:scale-102"
+          >
+            <div class="flex items-center gap-4 mb-4 mobile-gap-2 mobile-mb-2">
+              <div class="w-12 h-12 mobile-w-8 mobile-h-8 rounded-lg flex items-center justify-center shadow-md" style="background: #2a9c64;">
+                <svg class="w-6 h-6 mobile-w-4 mobile-h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 mobile-text-base">3P Assortments</h3>
+            </div>
+            <p class="text-sm text-gray-600 mobile-text-xs">Process and update third-party product assortments with validation</p>
+          </button>
+          <button
+            (click)="setMode('provider')"
+            class="group p-6 mobile-p-4 bg-white border-2 border-gray-200 hover:border-green-500 rounded-xl transition-all duration-300 ease-in-out text-left hover:shadow-lg transform hover:scale-102"
+          >
+            <div class="flex items-center gap-4 mb-4 mobile-gap-2 mobile-mb-2">
+              <div class="w-12 h-12 mobile-w-8 mobile-h-8 rounded-lg flex items-center justify-center shadow-md" style="background: #2a9c64;">
+                <svg class="w-6 h-6 mobile-w-4 mobile-h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-900 mobile-text-base">Provider Menu</h3>
+            </div>
+            <p class="text-sm text-gray-600 mobile-text-xs">Format provider menus with image management and organization</p>
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Provider Menu -->
+    @if (mode() === 'provider') {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8 mobile-p-4">
+      <div class="flex items-center justify-between mb-8 mobile-stack mobile-gap-4 mobile-mb-4">
+        <div class="flex items-center gap-4 mobile-gap-2">
+          <div class="w-12 h-12 mobile-w-8 mobile-h-8 rounded-xl flex items-center justify-center shadow-lg" style="background: linear-gradient(135deg, #2a9c64 0%, #0c2c1c 100%);">
+            <svg class="w-6 h-6 mobile-w-4 mobile-h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 mobile-text-lg">Image Management</h2>
+            <p class="text-gray-600 mobile-text-sm">Upload and assign images to your menu items</p>
+          </div>
+        </div>
+        
+        <div class="flex items-center gap-3 mobile-full mobile-justify-between">
+          <div class="px-3 py-1.5 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
+            Provider Menu
+          </div>
+          
+          <button
+            (click)="clearMode()"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-300 ease-in-out gap-2 transform hover:scale-105 mobile-full mobile-justify-center"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Mode Selection
+          </button>
+        </div>
+      </div>
+
+      <!-- Image Upload Section -->
+      <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+          <h5 class="text-md font-medium text-gray-800">Upload Images</h5>
+          <div class="flex items-center gap-2">
+            @if (isUploading()) {
+            <span class="text-sm text-green-600 flex items-center gap-1">
+              <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+              @if (uploadProgress().total > 0) {
+                Uploading... {{ uploadProgress().current }}/{{ uploadProgress().total }}
+              } @else {
+                Uploading...
+              }
+            </span>
+            }
+            <span class="text-sm text-gray-600">{{ images().length }} images uploaded</span>
+          </div>
+        </div>
+        
+        <div class="relative">
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            (change)="uploadMultipleImages($event)"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            id="image-upload"
+          />
+          <label
+            for="image-upload"
+            class="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-green-400 hover:bg-green-50 transition-all duration-300 ease-in-out transform hover:scale-102"
+          >
+            <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+            <span class="text-lg font-medium text-gray-700 mb-1">Choose Images</span>
+            <span class="text-sm text-gray-500">or drag and drop images here</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Uploaded Images Grid -->
+      @if (images().length > 0) {
+      <div class="mb-6">
+        <h5 class="text-md font-medium text-gray-800 mb-3">Uploaded Images</h5>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          @for (image of images(); track image.id) {
+          <div class="bg-white rounded-lg border border-gray-200 p-3 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+            <img 
+              [src]="image.thumbUrl" 
+              [alt]="image.fileName"
+              class="w-full h-24 object-cover rounded-md mb-2"
+            />
+            <p class="text-xs text-gray-600 truncate text-center mb-2" [title]="image.fileName">{{ image.fileName }}</p>
+            <div class="flex justify-center gap-1">
+              <a 
+                [href]="image.url" 
+                target="_blank"
+                class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                title="View full size"
+              >
+                View
+              </a>
+              <button
+                (click)="removeImage(image.id)"
+                class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+                title="Delete image"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-4">
         <button
-          (click)="setMode('3p')"
-          class="flex-1 inline-flex items-center justify-center px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors gap-2"
+          (click)="processProviderData()"
+          class="inline-flex items-center px-8 py-4 text-white font-semibold rounded-xl transition-all duration-300 ease-in-out gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105" 
+          style="background: linear-gradient(135deg, #2a9c64 0%, #0c2c1c 100%);"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8-8-8 8"></path>
           </svg>
-          Update 3P Assortments
+          Process Selected Columns
         </button>
+
         <button
-          (click)="setMode('provider')"
-          class="flex-1 inline-flex items-center justify-center px-6 py-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors gap-2"
+          (click)="downloadProviderCSV()"
+          [disabled]="!processedData().length"
+          class="inline-flex items-center px-8 py-4 text-white font-semibold rounded-xl transition-all duration-300 ease-in-out gap-3 shadow-lg hover:shadow-xl disabled:shadow-none transform hover:-translate-y-1 hover:scale-105 disabled:transform-none" 
+          [style]="!processedData().length ? 'background: #e5e7eb; cursor: not-allowed;' : 'background: linear-gradient(135deg, #74efaa 0%, #2a9c64 100%);'"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
           </svg>
-          Format Provider Menu
+          Download CSV
         </button>
       </div>
     </div>
     }
 
-    <!-- Processing Section -->
-    @if (selectedMode()) {
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-      <div>
-        <h3
-        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
-      >
-        <svg
-          class="w-6 h-6 text-blue-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          ></path>
-        </svg>
-        Select Columns to Export @if (selectedColumns().length > 0) {
-        <span
-          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-        >
-          {{ selectedColumns().length }} selected
-        </span>
-        }
-      </h3>
+    <!-- 3P Assortments Processing Section -->
+    @if (mode() === '3p') {
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8 mobile-p-4">
+      <div class="flex items-center justify-between mb-8 mobile-stack mobile-gap-4 mobile-mb-4">
+        <div class="flex items-center gap-4 mobile-gap-2">
+          <div class="w-12 h-12 mobile-w-8 mobile-h-8 rounded-xl flex items-center justify-center shadow-lg" style="background: linear-gradient(135deg, #2a9c64 0%, #0c2c1c 100%);">
+            <svg class="w-6 h-6 mobile-w-4 mobile-h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 mobile-text-lg">Data Processing & Formatting</h2>
+            <p class="text-gray-600 mobile-text-sm">Clean, transform, and format your data before export</p>
+          </div>
+          @if (selectedColumns().length > 0) {
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg border border-green-200 pulse-glow">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-semibold">{{ selectedColumns().length }} selected</span>
+          </div>
+          }
+        </div>
+        
+        <div class="flex items-center gap-3 mobile-full mobile-justify-between">
+          <!-- Mode indicator badge -->
+          <div class="px-3 py-1.5 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+            3P Assortments
+          </div>
+          
+          <button
+            (click)="clearMode()"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-300 ease-in-out gap-2 transform hover:scale-105 mobile-full mobile-justify-center"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Mode Selection
+          </button>
+        </div>
+      </div>
 
-      @if (selectedMode() === '3p') {
-      <div
-        cdkDropList
-        (cdkDropListDropped)="dropColumn($event)"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-8"
-      >
+      <!-- Mobile selected count -->
+      @if (selectedColumns().length > 0) {
+        <div class="sm:hidden mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+          <div class="flex items-center gap-2 text-green-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-semibold">{{ selectedColumns().length }} columns selected</span>
+          </div>
+        </div>
+      }
+
+      <!-- Data Processing Action Buttons (3P Mode Only) -->
+      @if (headers().length > 0) {
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-8 border border-blue-200">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2 flex items-center gap-2">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              Data Processing Tools
+            </h3>
+            <p class="text-gray-600 text-sm">Transform and format your data with powerful processing tools</p>
+          </div>
+          
+          @if (columnDataTypes().length > 0) {
+          <div class="hidden md:flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-800 rounded-lg">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span class="text-sm font-medium">{{ columnDataTypes().length }} columns analyzed</span>
+          </div>
+          }
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <!-- Clean Data Button -->
+          <button
+            (click)="performDataCleaning()"
+            class="group relative overflow-hidden bg-white rounded-xl border-2 border-green-200 hover:border-green-300 p-5 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+          >
+            <div class="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative">
+              <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-green-200 transition-colors duration-300">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Clean Data</h4>
+              <p class="text-sm text-gray-600 leading-relaxed">Remove extra whitespace and duplicate rows automatically</p>
+              
+              @if (cleaningOptions().trimWhitespace || cleaningOptions().removeDuplicates) {
+              <div class="mt-3 flex flex-wrap gap-1">
+                @if (cleaningOptions().trimWhitespace) {
+                <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">Whitespace</span>
+                }
+                @if (cleaningOptions().removeDuplicates) {
+                <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">Duplicates</span>
+                }
+              </div>
+              }
+            </div>
+          </button>
+
+          <!-- Transform Columns Button -->
+          <button
+            (click)="openTransformDialog()"
+            class="group relative overflow-hidden bg-white rounded-xl border-2 border-purple-200 hover:border-purple-300 p-5 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+          >
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-violet-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative">
+              <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-purple-200 transition-colors duration-300">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Transform Columns</h4>
+              <p class="text-sm text-gray-600 leading-relaxed">Apply formatting like uppercase, lowercase, dates, and more</p>
+              
+              @if (appliedTransformations().length > 0) {
+              <div class="mt-3">
+                <span class="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">{{ appliedTransformations().length }} active</span>
+              </div>
+              }
+            </div>
+          </button>
+
+          <!-- Search & Replace Button -->
+          <button
+            (click)="openSearchReplaceDialog()"
+            class="group relative overflow-hidden bg-white rounded-xl border-2 border-orange-200 hover:border-orange-300 p-5 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+          >
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-amber-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative">
+              <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-orange-200 transition-colors duration-300">
+                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Search & Replace</h4>
+              <p class="text-sm text-gray-600 leading-relaxed">Find and replace specific text across selected columns</p>
+              
+              @if (findReplaceOperation().find) {
+              <div class="mt-3">
+                <span class="px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded-full">Pattern set</span>
+              </div>
+              }
+            </div>
+          </button>
+
+          <!-- Sort & Filter Button -->
+          <button
+            (click)="openSortFilterDialog()"
+            class="group relative overflow-hidden bg-white rounded-xl border-2 border-indigo-200 hover:border-indigo-300 p-5 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"
+          >
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 to-blue-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="relative">
+              <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-3 group-hover:bg-indigo-200 transition-colors duration-300">
+                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z"></path>
+                </svg>
+              </div>
+              <h4 class="text-lg font-semibold text-gray-900 mb-2">Sort & Filter</h4>
+              <p class="text-sm text-gray-600 leading-relaxed">Organize and filter your data before exporting</p>
+              
+              @if (appliedFilters().length > 0 || columnSort().columnIndex !== -1) {
+              <div class="mt-3 flex flex-wrap gap-1">
+                @if (columnSort().columnIndex !== -1) {
+                <span class="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded-full">Sorted</span>
+                }
+                @if (appliedFilters().length > 0) {
+                <span class="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded-full">{{ appliedFilters().length }} filters</span>
+                }
+              </div>
+              }
+            </div>
+          </button>
+        </div>
+
+        <!-- Quick Actions Row -->
+        <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-200">
+          <button
+            (click)="inferDataTypes()"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition-all duration-300 ease-in-out gap-2 transform hover:scale-105"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            Auto-Detect Data Types
+          </button>
+
+          @if (dataPreview().processedRows.length > 0) {
+          <button
+            (click)="applyAllProcessing()"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg transition-all duration-300 ease-in-out gap-2 transform hover:scale-105"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Apply All Processing
+          </button>
+          }
+
+          @if (appliedTransformations().length > 0 || appliedFilters().length > 0 || cleaningOptions().trimWhitespace || cleaningOptions().removeDuplicates) {
+          <button
+            (click)="resetAllProcessing()"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-300 ease-in-out gap-2 transform hover:scale-105"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            Reset All
+          </button>
+          }
+        </div>
+
+        <!-- Data Type Detection Results -->
+        @if (columnDataTypes().length > 0) {
+        <div class="mt-6 p-4 bg-white rounded-lg border border-blue-200">
+          <h5 class="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            Detected Column Types
+          </h5>
+          <div class="flex flex-wrap gap-2">
+            @for (type of columnDataTypes(); track $index) {
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium"
+                 [class]="type.type === 'number' ? 'bg-green-100 text-green-700 border border-green-200' : 
+                          type.type === 'date' ? 'bg-purple-100 text-purple-700 border border-purple-200' : 
+                          type.type === 'boolean' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
+                          'bg-gray-100 text-gray-700 border border-gray-200'">
+              <span class="truncate max-w-20">{{ headers()[$index] }}</span>
+              <span class="font-semibold">{{ type.type }}</span>
+              <span class="opacity-75">({{ (type.confidence * 100).toFixed(0) }}%)</span>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+
+      <!-- Column Selection Grid (3P Mode Only) -->
+      @if (mode() === '3p') {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
         @for (header of headers(); track $index) {
-        <div
-          cdkDrag
-          class="flex flex-col"
-        >
+        <div class="group">
           <label
-            class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
-            [class.border-blue-500]="selectedColumns().includes($index)"
-            [class.bg-blue-50]="selectedColumns().includes($index)"
+            class="flex items-center p-4 rounded-xl border-2 transition-all duration-300 ease-in-out cursor-pointer transform hover:scale-102"
+            [class]="selectedColumns().includes($index) 
+              ? 'border-green-300 bg-green-50 shadow-md' 
+              : 'border-gray-200 bg-white hover:border-green-200 hover:bg-green-50/50 hover:shadow-sm'"
           >
             <input
               type="checkbox"
               [checked]="selectedColumns().includes($index)"
               (change)="toggleColumn($index, $event)"
-              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              class="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
             />
-            <div class="flex-grow flex items-center justify-between">
-              <span
-                class="ml-3 text-sm font-medium text-gray-700 truncate"
-                [title]="header"
-              >{{ header }}</span>
-              @if (showImageManagement()) {
-                <button
-                  type="button"
-                  (click)="openImageAssignment($index)"
-                  class="ml-2 p-1.5 text-gray-400 hover:text-purple-600 rounded-full hover:bg-purple-50 transition-colors"
-                  [class.text-purple-600]="columnImageMap()[$index]"
-                  [title]="columnImageMap()[$index] ? 'Change image' : 'Assign image'"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </button>
-              }
-            </div>
+            <span
+              class="ml-3 text-sm font-medium text-gray-700 truncate flex-1"
+              [title]="header"
+            >{{ header }}</span>
           </label>
-          @if (showImageManagement() && columnImageMap()[$index]) {
-          <div class="mt-2 p-2 bg-purple-50 rounded-lg border border-purple-100">
-            <div class="flex items-center gap-2">
-              <img 
-                [src]="columnImageMap()[$index].thumbUrl" 
-                [alt]="columnImageMap()[$index].fileName"
-                class="w-8 h-8 rounded object-cover"
-              />
-              <a 
-                [href]="columnImageMap()[$index].url"
-                target="_blank"
-                class="text-xs text-purple-600 hover:text-purple-800 truncate flex-grow"
-              >
-                {{ columnImageMap()[$index].fileName }}
-              </a>
-              <button
-                (click)="removeColumnImage($index)"
-                class="p-1 text-gray-400 hover:text-red-500"
-                title="Remove image association"
-              >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          }
-          <div class="cdkDragHandle mt-1 opacity-0 group-hover:opacity-100 transition-opacity cursor-move">
-            <div class="flex justify-center">
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-              </svg>
-            </div>
-          </div>
         </div>
         }
       </div>
 
       <!-- Processing Options -->
       <div class="border-t border-gray-200 pt-6 mb-6">
-        <h4
-          class="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2"
-        >
+        <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center gap-2">
           <svg
-            class="w-5 h-5 text-blue-600"
+            class="w-5 h-5 text-green-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -269,260 +792,191 @@
         </h4>
 
         <div class="space-y-4">
-          @if (selectedMode() === '3p') {
-          <div class="flex items-start gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all">
-            <label class="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                [ngModel]="validateBarcodes()"
-                (ngModelChange)="updateValidateBarcodes($event)"
-                class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-              />
-              <div class="ml-3">
-                <span class="text-sm font-medium text-gray-700"
-                  >Validate Barcode Length</span
-                >
-                <p class="text-sm text-gray-500">
-                  Add measurement columns based on barcode length
-                </p>
-              </div>
-            </label>
-
-            <div class="flex-1 flex flex-col">
-              <label class="text-sm font-medium text-gray-700 mb-1">Select Barcode Column</label>
-              <select
-                [ngModel]="selectedBarcodeColumn()"
-                (ngModelChange)="updateSelectedBarcodeColumn($event)"
-                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-                [disabled]="!validateBarcodes()"
-              >
-                <option value="">Select a column</option>
-                @for (header of headers(); track header) {
-                  <option [value]="header">{{ header }}</option>
-                }
-              </select>
-            </div>
-          </div>
-          }
-
-          @if (selectedMode() === 'provider') {
-          <label
-            class="flex items-center p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-all"
-          >
+          @if (mode() === '3p') {
+          <label class="flex items-center p-4 rounded-lg border border-gray-200 hover:border-green-300 hover:bg-green-50 cursor-pointer transition-all duration-300 ease-in-out transform hover:scale-102">
             <input
               type="checkbox"
-              [ngModel]="showImageManagement()"
-              (ngModelChange)="updateShowImageManagement($event)"
-              class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+              [ngModel]="validateBarcodes()"
+              (ngModelChange)="updateValidateBarcodes($event)"
+              class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
             />
             <div class="ml-3">
-              <span class="text-sm font-medium text-gray-700"
-                >Match Images</span
-              >
-              <p class="text-sm text-gray-500">
-                Enable image upload and management for data entries
-              </p>
+              <span class="text-sm font-medium text-gray-700">Validate Barcode Length</span>
+              <p class="text-sm text-gray-500">Add measurement columns based on barcode length</p>
             </div>
           </label>
           }
         </div>
       </div>
+      }
 
-      <!-- Image Upload Section -->
-      @if (showImageManagement()) {
-      <div class="border-t border-gray-200 pt-6 mb-6">
-        <h4 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <span class="inline-flex items-center justify-center w-8 h-8 bg-purple-100 rounded-full">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </span>
-          Image Management
-        </h4>
-
-        <!-- Image Upload Area -->
-        <div class="p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-purple-400 transition-colors">
-          <div class="text-center">
+        <!-- Image Upload Section -->
+        <div class="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <h5 class="text-md font-medium text-gray-800">Upload Images</h5>
+            <div class="flex items-center gap-2">
+              @if (isUploading()) {
+              <span class="text-sm text-green-600 flex items-center gap-1">
+                <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                @if (uploadProgress().total > 0) {
+                  Uploading... {{ uploadProgress().current }}/{{ uploadProgress().total }}
+                } @else {
+                  Uploading...
+                }
+              </span>
+              }
+              <span class="text-sm text-gray-600">{{ images().length }} images uploaded</span>
+            </div>
+          </div>
+          
+          <div class="relative">
             <input
               type="file"
               multiple
               accept="image/*"
-              #imageInput
-              class="hidden"
               (change)="uploadMultipleImages($event)"
+              class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              id="image-upload"
             />
-            <div class="space-y-2">
-              <button
-                (click)="imageInput.click()"
-                class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors gap-2"
-                [disabled]="isUploading()"
-              >
-                @if (isUploading()) {
-                  <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                } @else {
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                }
-                {{ isUploading() ? 'Uploading...' : 'Upload Images' }}
-              </button>
-              <p class="text-sm text-gray-500">Drag & drop images here or click to select</p>
-            </div>
+            <label
+              for="image-upload"
+              class="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-green-400 hover:bg-green-50 transition-all duration-300 ease-in-out transform hover:scale-102"
+            >
+              <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+              </svg>
+              <span class="text-lg font-medium text-gray-700 mb-1">Choose Images</span>
+              <span class="text-sm text-gray-500">or drag and drop images here</span>
+            </label>
           </div>
         </div>
 
-        <!-- Image List -->
+        <!-- Uploaded Images Grid -->
         @if (images().length > 0) {
-        <div class="mt-6 space-y-4">
-          <div class="flex justify-between items-center">
-            <h5 class="text-sm font-medium text-gray-700">Uploaded Images ({{ images().length }})</h5>
-            <div class="flex gap-2">
+        <div class="mb-6">
+          <h5 class="text-md font-medium text-gray-800 mb-3">Uploaded Images</h5>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            @for (image of images(); track image.id) {
+            <div class="bg-white rounded-lg border border-gray-200 p-3 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out transform hover:scale-105">
+              <img 
+                [src]="image.thumbUrl" 
+                [alt]="image.fileName"
+                class="w-full h-24 object-cover rounded-md mb-2"
+              />
+              <p class="text-xs text-gray-600 truncate mb-2" [title]="image.fileName">{{ image.fileName }}</p>
+              <div class="flex gap-1">
+                <button
+                  (click)="copyImageUrl(image.url)"
+                  class="flex-1 px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-all duration-300 ease-in-out transform hover:scale-105"
+                  title="Copy URL"
+                >
+                  Copy URL
+                </button>
+                <button
+                  (click)="removeImage(image.id)"
+                  class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-all duration-300 ease-in-out transform hover:scale-105"
+                  title="Remove"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+        }
+
+        <!-- Row Image Assignment Instructions -->
+        @if (images().length > 0) {
+        <div class="mb-6">
+          <h5 class="text-md font-medium text-gray-800 mb-3">Assign Images to Rows</h5>
+          <p class="text-sm text-gray-600 mb-4">Images can be assigned to individual data rows. Click anywhere on a row in the data table below to assign an image, or use the "📷" button.</p>
+          
+          <!-- Auto-match functionality -->
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <h6 class="text-sm font-medium text-blue-800 mb-2">Auto-match Images</h6>
+            <p class="text-xs text-blue-600 mb-3">Automatically match image filenames with column values</p>
+            
+            <div class="flex flex-col sm:flex-row gap-3">
+              <div class="flex-1">
+                <select
+                  [value]="selectedMatchingColumn()"
+                  (change)="updateMatchingColumn($any($event.target).value)"
+                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                >
+                  <option value="">Select column to match with...</option>
+                  @for (header of headers(); track $index) {
+                  <option [value]="$index">{{ header }}</option>
+                  }
+                </select>
+              </div>
+              
               <button
-                (click)="exportAsJSON()"
-                class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors gap-1"
+                (click)="executeImageMatching()"
+                [disabled]="selectedMatchingColumn() === ''"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg transition-all duration-300 ease-in-out gap-2 transform hover:scale-105"
+                [class]="selectedMatchingColumn() === '' 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-green-600 hover:bg-green-700 hover:shadow-md'"
               >
-                Export JSON
-              </button>
-              <button
-                (click)="exportAsCSV()"
-                class="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors gap-1"
-              >
-                Export CSV
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                Execute Match
               </button>
             </div>
-          </div>
-
-          <div cdkDropList (cdkDropListDropped)="drop($event)" class="space-y-3">
-            @for (image of images(); track image.id) {
-            <div
-              cdkDrag
-              class="flex items-center gap-4 p-3 bg-white rounded-lg border border-gray-200 hover:border-purple-300 transition-colors"
-            >
-              <div class="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
-                <img [src]="image.thumbUrl" [alt]="image.fileName" class="w-full h-full object-cover" />
-              </div>
-              <div class="flex-grow min-w-0">
-                <div class="flex items-center gap-3 mb-2">
-                  <span class="text-sm font-medium text-gray-900">{{ image.fileName }}</span>
-                  <input
-                    type="text"
-                    [(ngModel)]="image.category"
-                    placeholder="Enter category..."
-                    class="flex-1 text-sm text-gray-900 bg-transparent border-b border-gray-300 focus:border-purple-500 focus:outline-none"
-                  />
-                </div>
-                <div class="flex items-center gap-2">
-                  <a 
-                    [href]="image.url" 
-                    target="_blank" 
-                    class="text-sm text-blue-600 hover:text-blue-800 truncate"
-                    [title]="image.url"
-                  >
-                    {{ image.url }}
-                  </a>
-                  <button
-                    (click)="copyToClipboard(image.url)"
-                    class="p-1 text-gray-400 hover:text-gray-600"
-                    title="Copy URL"
-                  >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <button
-                (click)="removeImage(image.id)"
-                class="flex-shrink-0 text-gray-400 hover:text-red-500 transition-colors"
-                title="Remove image"
-              >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
+            
+            @if (matchingResults()) {
+            <div class="mt-3 p-3 bg-white rounded border border-blue-200">
+              <p class="text-sm text-blue-800">
+                <strong>Matching Results:</strong> {{ matchingResults() }}
+              </p>
             </div>
             }
           </div>
         </div>
         }
       </div>
-      }
 
-      <!-- Action Buttons -->
+      <!-- Action Buttons (3P Mode Only) -->
+      @if (mode() === '3p') {
       <div class="flex flex-wrap gap-4">
         <button
           (click)="processData()"
           [disabled]="selectedColumns().length === 0"
-          class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors gap-2"
+          class="inline-flex items-center px-8 py-4 text-white font-semibold rounded-xl transition-all duration-300 ease-in-out gap-3 shadow-lg hover:shadow-xl disabled:shadow-none transform hover:-translate-y-1 hover:scale-105 disabled:transform-none"
+          [style]="selectedColumns().length === 0 ? 'background: #e5e7eb; cursor: not-allowed;' : 'background: linear-gradient(135deg, #2a9c64 0%, #0c2c1c 100%);'"
         >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 4v16m8-8l-8-8-8 8"
-            ></path>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8-8-8 8"></path>
           </svg>
-          Export Selected Columns
+          Process Selected Columns
         </button>
 
         <button
           (click)="downloadProcessedData()"
           [disabled]="!processedData().length"
-          class="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors gap-2"
+          class="inline-flex items-center px-8 py-4 text-white font-semibold rounded-xl transition-all duration-300 ease-in-out gap-3 shadow-lg hover:shadow-xl disabled:shadow-none transform hover:-translate-y-1 hover:scale-105 disabled:transform-none"
+          [style]="!processedData().length ? 'background: #e5e7eb; cursor: not-allowed;' : 'background: linear-gradient(135deg, #74efaa 0%, #2a9c64 100%);'"
         >
-          <svg
-            class="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-            ></path>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
           </svg>
           Download CSV
         </button>
       </div>
-    </div>
-    }
+      }
 
     <!-- Original Data Table -->
-    @if (csvData().length > 0) {
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-      <h3
-        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
-      >
-        <svg
-          class="w-6 h-6 text-green-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          ></path>
+      <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
         </svg>
         Original Data
-        <span
-          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
-        >
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
           {{ csvData().length }} rows
         </span>
       </h3>
@@ -530,57 +984,79 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16"
-              >
-                #
-              </th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">#</th>
               @for (header of headers(); track $index) {
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider transition-colors"
-                [class.bg-blue-100]="selectedColumns().includes($index)"
-                [class.text-blue-700]="selectedColumns().includes($index)"
-              >
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider transition-all duration-300 ease-in-out"
+                  [class.bg-green-100]="selectedColumns().includes($index)"
+                  [class.text-green-700]="selectedColumns().includes($index)">
                 {{ header }}
               </th>
+              }
+              @if (mode() === 'provider') {
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Image</th>
               }
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
             @for (row of csvData(); track $index) {
-            <tr class="hover:bg-gray-50">
-              <td
-                class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500"
-              >
-                {{ $index + 1 }}
-              </td>
+            <tr 
+              class="transition-all duration-300 ease-in-out"
+              [class]="mode() === 'provider' 
+                ? 'hover:bg-purple-50 hover:shadow-sm cursor-pointer transform hover:scale-101' 
+                : 'hover:bg-gray-50'"
+              (click)="mode() === 'provider' ? onRowClick($index) : null"
+            >
+              <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500">{{ $index + 1 }}</td>
               @for (cell of row; track $index) {
-              <td
-                class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 transition-colors"
-                [class.bg-blue-50]="selectedColumns().includes($index)"
-                [class.border-l-2]="selectedColumns().includes($index)"
-                [class.border-blue-300]="selectedColumns().includes($index)"
-              >
-                @if (processedHeaders()[$index] === 'External image URL') {
-                  <div class="flex items-center gap-2">
-                    @if (cell) {
-                      <img [src]="cell" class="w-10 h-10 object-cover rounded" alt="Preview" 
-                           (error)="$event.target.src='assets/placeholder.png'"/>
-                    }
-                    <div class="flex-1 min-w-0">
-                      <div class="border-2 border-dashed border-gray-300 p-2 rounded cursor-pointer"
-                           [class.border-blue-400]="isDragging()"
-                           [class.bg-blue-50]="isDragging()"
-                           (dragover)="$event.preventDefault()"
-                           (dragenter)="handleDragEnter($event, $index)"
-                           (dragleave)="handleDragLeave($event)"
-                           (drop)="handleDrop($event, row, $index)">
-                        <span class="truncate block">{{ cell || 'Drop image URL here' }}</span>
-                      </div>
-                    </div>
-                  </div>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900 transition-all duration-300 ease-in-out"
+                  [class.bg-green-50]="selectedColumns().includes($index)"
+                  [class.border-l-2]="selectedColumns().includes($index)"
+                  [class.border-green-300]="selectedColumns().includes($index)">
+                {{ cell }}
+              </td>
+              }
+              @if (mode() === 'provider') {
+              <td class="px-4 py-3 whitespace-nowrap text-sm">
+                @if (rowImageMap()[$index]) {
+                <div class="flex items-center gap-2">
+                  @if (mode() === 'provider') {
+                  <a 
+                    [href]="rowImageMap()[$index].url" 
+                    target="_blank"
+                    class="block hover:opacity-75 transition-opacity"
+                    title="Open image in new tab"
+                  >
+                    <img 
+                      [src]="rowImageMap()[$index].thumbUrl" 
+                      [alt]="rowImageMap()[$index].fileName"
+                      class="w-8 h-8 object-cover rounded border-2 border-purple-300"
+                      [title]="rowImageMap()[$index].fileName"
+                    />
+                  </a>
+                  } @else {
+                  <img 
+                    [src]="rowImageMap()[$index].thumbUrl" 
+                    [alt]="rowImageMap()[$index].fileName"
+                    class="w-8 h-8 object-cover rounded"
+                    [title]="rowImageMap()[$index].fileName"
+                  />
+                  }
+                  <button
+                    (click)="stopPropagation($event); removeRowImage($index)"
+                    class="text-red-600 hover:text-red-800 text-xs"
+                    title="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
                 } @else {
-                  {{ cell }}
+                <button
+                  (click)="stopPropagation($event); openImageAssignment($index)"
+                  class="text-purple-600 hover:text-purple-800 text-sm"
+                  title="Assign image"
+                >
+                  📷
+                </button>
                 }
               </td>
               }
@@ -590,33 +1066,16 @@
         </table>
       </div>
     </div>
-    }
 
-    }
-    
-    <!-- Exported Data Table -->
+    <!-- Processed Data Table -->
     @if (processedData().length > 0) {
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-      <h3
-        class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2"
-      >
-        <svg
-          class="w-6 h-6 text-purple-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          ></path>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+      <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
         </svg>
-        Exported Data
-        <span
-          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
-        >
+        Processed Data
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
           {{ processedData().length }} rows
         </span>
       </h3>
@@ -624,75 +1083,72 @@
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16"
-              >
-                #
-              </th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">#</th>
               @for (header of processedHeaders(); track $index) {
-              <th
-                class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 {{ header }}
               </th>
               }
+              @if (mode() === 'provider') {
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">Image</th>
+              }
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200" cdkDropList (cdkDropListDropped)="onDragRow($event)">
+          <tbody class="bg-white divide-y divide-gray-200">
             @for (row of processedData(); track $index) {
-            <tr class="hover:bg-gray-50" cdkDrag [cdkDragDisabled]="!isExternalImageUrlRow(row)">
-              <td
-                class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500"
-              >
-                {{ $index + 1 }}
-              </td>
+            <tr 
+              class="transition-all duration-300 ease-in-out"
+              [class]="mode() === 'provider' 
+                ? 'hover:bg-purple-50 hover:shadow-sm cursor-pointer transform hover:scale-101' 
+                : 'hover:bg-gray-50'"
+              (click)="mode() === 'provider' ? onRowClick($index) : null"
+            >
+              <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-500">{{ $index + 1 }}</td>
               @for (cell of row; track $index) {
-              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
-                @if (processedHeaders()[$index] === 'External image URL') {
-                  <div class="flex items-center gap-2 group" cdkDrag [cdkDragData]="{ row: row, index: $index }">
-                    @if (cell) {
-                      <img [src]="cell" class="w-10 h-10 object-cover rounded" alt="Preview" 
-                           (error)="$event.target.src='assets/placeholder.png'"/>
-                    }
-                    <div class="flex-1 min-w-0">
-                      <div class="relative">
-                        <button
-                          (click)="toggleImageUrlDropdown($index)"
-                          class="w-full flex items-center justify-between border-2 border-dashed border-gray-300 p-2 rounded hover:border-purple-400 hover:bg-purple-50 transition-colors"
-                        >
-                          <span class="truncate block">{{ cell || 'Select image URL' }}</span>
-                          <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                        @if (activeDropdownIndex() === $index) {
-                          <div class="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg border border-gray-200">
-                            <div class="max-h-48 overflow-y-auto">
-                              @for (image of images(); track image.id) {
-                                <button
-                                  (click)="selectImageUrl(row, $index, image.url)"
-                                  class="w-full px-3 py-2 text-left hover:bg-purple-50 flex items-center gap-2"
-                                >
-                                  <img [src]="image.thumbUrl" class="w-8 h-8 object-cover rounded" [alt]="image.fileName"/>
-                                  <div class="flex-1 min-w-0">
-                                    <div class="text-sm font-medium text-gray-900 truncate">{{ image.fileName }}</div>
-                                    <div class="text-xs text-gray-500 truncate">{{ image.url }}</div>
-                                  </div>
-                                </button>
-                              }
-                            </div>
-                          </div>
-                        }
-                      </div>
-                    </div>
-                    <div class="opacity-0 group-hover:opacity-100 cursor-move">
-                      <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
-                      </svg>
-                    </div>
-                  </div>
+              <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">{{ cell }}</td>
+              }
+              @if (mode() === 'provider') {
+              <td class="px-4 py-3 whitespace-nowrap text-sm">
+                @if (rowImageMap()[$index]) {
+                <div class="flex items-center gap-2">
+                  @if (mode() === 'provider') {
+                  <a 
+                    [href]="rowImageMap()[$index].url" 
+                    target="_blank"
+                    class="block hover:opacity-75 transition-opacity"
+                    title="Open image in new tab"
+                  >
+                    <img 
+                      [src]="rowImageMap()[$index].thumbUrl" 
+                      [alt]="rowImageMap()[$index].fileName"
+                      class="w-8 h-8 object-cover rounded border-2 border-purple-300"
+                      [title]="rowImageMap()[$index].fileName"
+                    />
+                  </a>
+                  } @else {
+                  <img 
+                    [src]="rowImageMap()[$index].thumbUrl" 
+                    [alt]="rowImageMap()[$index].fileName"
+                    class="w-8 h-8 object-cover rounded"
+                    [title]="rowImageMap()[$index].fileName"
+                  />
+                  }
+                  <button
+                    (click)="stopPropagation($event); removeRowImage($index)"
+                    class="text-red-600 hover:text-red-800 text-xs"
+                    title="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
                 } @else {
-                  {{ cell }}
+                <button
+                  (click)="stopPropagation($event); openImageAssignment($index)"
+                  class="text-purple-600 hover:text-purple-800 text-sm"
+                  title="Assign image"
+                >
+                  📷
+                </button>
                 }
               </td>
               }
@@ -703,32 +1159,89 @@
       </div>
     </div>
     }
-    }
-    }
+  }
 
-    @if (csvData().length === 0) {
-    <div class="text-center py-12">
-      <div
-        class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4"
-      >
-        <svg
-          class="w-8 h-8 text-gray-400"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          ></path>
-        </svg>
-      </div>
-      <p class="text-gray-500 text-lg">
-        No data loaded. Please select a CSV or Excel file to get started.
-      </p>
+  @if (csvData().length === 0) {
+  <div class="text-center py-16">
+    <div class="mx-auto w-24 h-24 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
+      <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
     </div>
-    }
+    <h3 class="text-xl font-semibold text-gray-700 mb-2">Ready to Process Your Data</h3>
+    <p class="text-gray-500 max-w-md mx-auto">Upload a CSV or Excel file above to start organizing and exporting your data with powerful processing options.</p>
+  </div>
+  }
   </div>
 </div>
+
+<!-- Image Selection Modal -->
+@if (showImageSelection()) {
+<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" (click)="closeImageSelection()">
+  <div class="bg-white rounded-xl max-w-4xl w-full max-h-[80vh] overflow-hidden" (click)="$event.stopPropagation()">
+    <div class="flex items-center justify-between p-6 border-b border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900">Select Image for Column</h3>
+      <button
+        (click)="closeImageSelection()"
+        class="p-2 hover:bg-gray-100 rounded-full transition-all duration-300 ease-in-out transform hover:scale-110"
+      >
+        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Search bar -->
+    <div class="px-6 pb-4 border-b border-gray-100">
+      <div class="relative">
+        <input
+          type="text"
+          placeholder="Search images by name..."
+          [value]="imageSearchQuery()"
+          (input)="updateImageSearch($any($event.target).value)"
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        />
+        <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+    </div>
+    
+    <div class="p-6 overflow-y-auto max-h-[60vh]">
+      @if (filteredImages().length > 0) {
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        @for (image of filteredImages(); track image.id) {
+        <div 
+          class="bg-gray-50 rounded-lg border-2 border-transparent hover:border-green-300 cursor-pointer transition-all duration-300 ease-in-out p-3 transform hover:scale-105 hover:shadow-md"
+          (click)="assignImageToRow(image)"
+        >
+          <img 
+            [src]="image.thumbUrl" 
+            [alt]="image.fileName"
+            class="w-full h-24 object-cover rounded-md mb-2"
+          />
+          <p class="text-xs text-gray-600 truncate text-center" [title]="image.fileName">{{ image.fileName }}</p>
+        </div>
+        }
+      </div>
+      } @else {
+      <div class="text-center py-8">
+        @if (images().length === 0) {
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <p class="text-gray-500">No images uploaded yet</p>
+        <p class="text-sm text-gray-400 mt-1">Upload images first to assign them to columns</p>
+        } @else {
+        <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <p class="text-gray-500">No images found</p>
+        <p class="text-sm text-gray-400 mt-1">Try searching with different keywords</p>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
