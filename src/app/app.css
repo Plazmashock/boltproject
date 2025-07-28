@@ -1,5 +1,77 @@
 /* Using Tailwind CSS for all styling */
 
+/* Dark mode CSS variables */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --accent-color: #3b82f6;
+}
+
+.dark {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --border-color: #374151;
+  --accent-color: #60a5fa;
+}
+
+/* Ensure dark mode transitions work */
+.dark,
+.dark * {
+  border-color: var(--border-color);
+}
+
+/* Global dark mode application */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Override specific Tailwind classes for dark mode */
+.dark .bg-gray-50 {
+  background-color: #111827 !important;
+}
+
+.dark .bg-white {
+  background-color: #1f2937 !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #374151 !important;
+}
+
+.dark .text-gray-900 {
+  color: #f9fafb !important;
+}
+
+.dark .text-gray-800 {
+  color: #f3f4f6 !important;
+}
+
+.dark .text-gray-700 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-600 {
+  color: #9ca3af !important;
+}
+
+.dark .border-gray-200 {
+  border-color: #374151 !important;
+}
+
+.dark .border-gray-300 {
+  border-color: #4b5563 !important;
+}
+
 /* Custom animations and transitions */
 .fade-in {
   animation: fadeIn 0.3s ease-in-out;
@@ -8,6 +80,26 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhanced loading animation */
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+  50% { opacity: 0.8; box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+}
+
+/* Progress bar animation */
+.progress-slide {
+  animation: progressSlide 0.3s ease-out;
+}
+
+@keyframes progressSlide {
+  from { width: 0%; }
+  to { width: var(--progress-width); }
 }
 
 /* Custom scrollbar for tables */
@@ -20,13 +112,25 @@
   border-radius: 4px;
 }
 
+.dark .overflow-x-auto::-webkit-scrollbar-track {
+  background: #374151;
+}
+
 .overflow-x-auto::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
 
+.dark .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+.dark .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
 }
 
 /* Enhanced hover effects */
@@ -46,6 +150,80 @@
 .file-upload-area:hover {
   border-color: #3b82f6;
   background-color: #eff6ff;
+}
+
+.dark .file-upload-area:hover {
+  border-color: #60a5fa;
+  background-color: #1e3a8a;
+}
+
+/* Error message styles */
+.error-message {
+  animation: slideInError 0.3s ease-out;
+}
+
+@keyframes slideInError {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Success message styles */
+.success-message {
+  animation: slideInSuccess 0.3s ease-out;
+}
+
+@keyframes slideInSuccess {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile responsiveness enhancements */
+@media (max-width: 640px) {
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  .mobile-full {
+    width: 100% !important;
+  }
+  
+  .mobile-text-sm {
+    font-size: 0.875rem !important;
+  }
+  
+  .mobile-p-4 {
+    padding: 1rem !important;
+  }
+  
+  .mobile-gap-2 {
+    gap: 0.5rem !important;
+  }
+  
+  /* Hide less critical elements on mobile */
+  .mobile-hidden {
+    display: none !important;
+  }
+  
+  /* Table responsiveness */
+  .mobile-table {
+    font-size: 0.75rem;
+  }
+  
+  .mobile-table th,
+  .mobile-table td {
+    padding: 0.5rem 0.25rem;
+  }
+}
+
+/* Tablet responsiveness */
+@media (max-width: 768px) {
+  .tablet-stack {
+    flex-direction: column !important;
+  }
+  
+  .tablet-full {
+    width: 100% !important;
+  }
 }
 
 /* Checkbox custom styling */
